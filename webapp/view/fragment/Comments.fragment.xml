@@ -1,0 +1,32 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core" 	
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form">
+			<f:SimpleForm
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanXL="12"
+			labelSpanL="12"
+			labelSpanM="12"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="0"
+			emptySpanL="0"
+			emptySpanM="0"
+			emptySpanS="0"
+			columnsXL="2"
+			columnsL="2"
+			columnsM="1"
+			singleContainerFullSize="false" >
+			<f:content>
+				<core:Title />
+				<Label text="{i18n>main.shipmentDescription}" />
+				<TextArea />
+				
+				<core:Title  />
+				<Label text="{i18n>main.comment}" />
+				<TextArea />
+			</f:content>
+		</f:SimpleForm>
+</core:FragmentDefinition>

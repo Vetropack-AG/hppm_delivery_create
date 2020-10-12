@@ -1,0 +1,38 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Table>
+		<headerToolbar>
+			<OverflowToolbar >
+				<Title text="{i18n>main.pallets}" level="H2"/>
+				<ToolbarSpacer/>
+				<Button type="Transparent" tooltip="{i18n>general.add}" icon="sap-icon://add"/>
+			</OverflowToolbar>
+		</headerToolbar>
+		<columns>
+			<Column>
+				<Text text="{i18n>main.carrierType}"/>
+			</Column>
+			<Column width="18%" minScreenWidth="Tablet" demandPopin="true">
+				<Text text="{i18n>main.customerPackagingStock}"/>
+			</Column>
+			<Column width="18%" minScreenWidth="Tablet" demandPopin="true">
+				<Text text="{i18n>main.customerAccount}"/>
+			</Column>
+			<Column width="20%" minScreenWidth="Tablet" demandPopin="true">
+				<Text text="{i18n>main.amount}"/>
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem>
+				<cells>
+					<Select width="100%"/>
+					<Select width="100%"/>
+					<Select width="100%"/>
+					<HBox>
+						<StepInput/>
+						<Button icon="sap-icon://simulate" tooltip="{i18n.main.calculate}"/>
+					</HBox>
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
+</core:FragmentDefinition>
