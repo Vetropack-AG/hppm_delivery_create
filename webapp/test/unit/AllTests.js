@@ -1,5 +1,5 @@
 sap.ui.define([
-	"zvgd/hppm/delivery_create/test/unit/controller/Main.controller"
+	"zvgt/hppm/delivery_create/test/unit/controller/Main.controller"
 ], function () {
 	"use strict";
 });

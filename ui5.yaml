@@ -17,14 +17,14 @@ builder:
       configuration:
         destDir: dist
         appFolder: webapp
-        nameSpace: zvgd/hppm
+        nameSpace: zvgt/hppm
     - name: webide-extension-task-lint
       afterTask: webide-extension-task-updateNeoApp
       configuration:
         destDir: dist
         appFolder: webapp
-        nameSpace: zvgd/hppm 
+        nameSpace: zvgt/hppm 
     - name: webide-extension-task-resources
       afterTask: webide-extension-task-lint
       configuration:
-        nameSpace: zvgd/hppm
+        nameSpace: zvgt/hppm

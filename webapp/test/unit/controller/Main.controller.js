@@ -1,7 +1,7 @@
 /*global QUnit*/
 
 sap.ui.define([
-	"zvgd/hppm/delivery_create/controller/Main.controller"
+	"zvgt/hppm/delivery_create/controller/Main.controller"
 ], function (Controller) {
 	"use strict";
 

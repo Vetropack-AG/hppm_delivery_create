@@ -3,7 +3,7 @@ sap.ui.define([
 ], function (Opa5) {
 	"use strict";
 
-	return Opa5.extend("zvgd.hppm.delivery_create.test.integration.arrangements.Startup", {
+	return Opa5.extend("zvgt.hppm.delivery_create.test.integration.arrangements.Startup", {
 
 		iStartMyApp: function (oOptionsParameter) {
 			var oOptions = oOptionsParameter || {};
@@ -14,7 +14,7 @@ sap.ui.define([
 			// start the app UI component
 			this.iStartMyUIComponent({
 				componentConfig: {
-					name: "zvgd.hppm.delivery_create",
+					name: "zvgt.hppm.delivery_create",
 					async: true
 				},
 				hash: oOptions.hash,

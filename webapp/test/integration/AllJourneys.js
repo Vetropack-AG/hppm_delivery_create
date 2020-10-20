@@ -7,7 +7,7 @@ sap.ui.define([
 
 	Opa5.extendConfig({
 		arrangements: new Startup(),
-		viewNamespace: "zvgd.hppm.delivery_create.view.",
+		viewNamespace: "zvgt.hppm.delivery_create.view.",
 		autoWait: true
 	});
 });

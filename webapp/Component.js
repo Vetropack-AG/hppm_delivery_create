@@ -1,11 +1,11 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
-	"zvgd/hppm/delivery_create/model/models"
+	"zvgt/hppm/delivery_create/model/models"
 ], function (UIComponent, models) {
 	"use strict";
 
 	/**
-	 * @constructor zvgd.hppm.delivery_create.Component
+	 * @constructor zvgt.hppm.delivery_create.Component
 	 * 
 	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
@@ -19,11 +19,11 @@ sap.ui.define([
 	 * @extends sap.ui.core.UIComponent
 	 *
 	 * @public
-	 * @alias zvgd.hppm.delivery_create.Component
+	 * @alias zvgt.hppm.delivery_create.Component
 	 * @class 
 	 */
 
-	return UIComponent.extend("zvgd.hppm.delivery_create.Component", {
+	return UIComponent.extend("zvgt.hppm.delivery_create.Component", {
 
 		metadata: {
 			manifest: "json"
@@ -37,7 +37,7 @@ sap.ui.define([
 		 * The component is initialized by UI5 automatically during the startup of the app and calls the init method once.
 		 * @public
 		 * @override
-		 * @name zvgd.hppm.delivery_create.Component#init
+		 * @name zvgt.hppm.delivery_create.Component#init
 		 * @method
 		 */
 		init: function () {
@@ -54,7 +54,7 @@ sap.ui.define([
 		/**
 		 * Registers the messsage manager to the app.
 		 * @private
-		 * @name zvgd.hppm.delivery_create.Component#_registerMessageManager
+		 * @name zvgt.hppm.delivery_create.Component#_registerMessageManager
 		 * @method
 		 */
 		_registerMessageManager: function () {

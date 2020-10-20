@@ -4,7 +4,7 @@ sap.ui.define([
 	"use strict";
 
 	/**
-	 * @constructor zvgd.hppm.delivery_create.controller.BaseController
+	 * @constructor zvgt.hppm.delivery_create.controller.BaseController
 	 * 
 	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
@@ -18,11 +18,11 @@ sap.ui.define([
 	 * @extends sap.ui.core.mvc.Controller
 	 *
 	 * @public
-	 * @alias zvgd.hppm.delivery_create.controller.BaseController
+	 * @alias zvgt.hppm.delivery_create.controller.BaseController
 	 * @class 
 	 */
 
-	return Controller.extend("zvgd.hppm.delivery_create.controller.BaseController", {
+	return Controller.extend("zvgt.hppm.delivery_create.controller.BaseController", {
 
 		/* =========================================================== */
 		/* public methods                                              */
@@ -31,7 +31,7 @@ sap.ui.define([
 		/**
 		 * Adds a message to the message manager.
 		 * @param {object} mSettings The settings for the message.
-		 * @name zvgd.hppm.delivery_create.controller.BaseController#addMessage
+		 * @name zvgt.hppm.delivery_create.controller.BaseController#addMessage
 		 * @public
 		 * @method
 		 */
@@ -49,7 +49,7 @@ sap.ui.define([
 		 * Adds an error message to the message manager.
 		 * @param {string} sMessage The message to display.
 		 * @param {string} sTarget The single message target.
-		 * @name zvgd.hppm.delivery_create.controller.BaseController#addErrorMessage
+		 * @name zvgt.hppm.delivery_create.controller.BaseController#addErrorMessage
 		 * @public
 		 * @method
 		 */
@@ -65,7 +65,7 @@ sap.ui.define([
 		 * Adds an success message to the message manager.
 		 * @param {string} sMessage The message to display.
 		 * @param {string} sTarget The single message target.
-		 * @name zvgd.hppm.delivery_create.controller.BaseController#addSuccessMessage
+		 * @name zvgt.hppm.delivery_create.controller.BaseController#addSuccessMessage
 		 * @public
 		 * @method
 		 */
@@ -82,13 +82,13 @@ sap.ui.define([
 		 * @param {string} sFragmentId The ID of the fragment to get.
 		 * @param {string} oContext The context of the fragment.
 		 * @returns {sap.ui.xmlfragment} The fragment instance.
-		 * @name zvgd.hppm.delivery_create.controller.BaseController#getFragment
+		 * @name zvgt.hppm.delivery_create.controller.BaseController#getFragment
 		 * @public
 		 * @method
 		 */
 		getFragment: function (sFragmentId, oContext) {
 			if (!oContext[sFragmentId]) {
-				oContext[sFragmentId] = sap.ui.xmlfragment("zvgd.hppm.delivery_create.view.fragment." + sFragmentId, oContext);
+				oContext[sFragmentId] = sap.ui.xmlfragment("zvgt.hppm.delivery_create.view.fragment." + sFragmentId, oContext);
 				oContext.getView().addDependent(oContext[sFragmentId]);
 			}
 			return oContext[sFragmentId];
