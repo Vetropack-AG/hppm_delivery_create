@@ -1,6 +1,7 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller"
-], function (Controller) {
+	"sap/ui/core/mvc/Controller",
+	"sap/m/MessageBox"
+], function (Controller, MessageBox) {
 	"use strict";
 
 	/**
@@ -92,6 +93,18 @@ sap.ui.define([
 				oContext.getView().addDependent(oContext[sFragmentId]);
 			}
 			return oContext[sFragmentId];
+		},
+
+		showErrorMessage: function (sMessage, bPreventAddToMessageContainer) {
+			MessageBox.error(sMessage);
+
+			if (!bPreventAddToMessageContainer) {
+				this.addErrorMessage(sMessage);
+			}
+		},
+
+		closeDialogByEvent: function (oEvent) {
+			oEvent.getSource().getParent().close();
 		}
 
 		/* =========================================================== */

@@ -11,13 +11,13 @@
 			<Column>
 				<Text text="{i18n>main.carrierType}"/>
 			</Column>
-			<Column width="18%" minScreenWidth="Tablet" demandPopin="true">
+			<Column width="18%" minScreenWidth="Desktop" demandPopin="true">
 				<Text text="{i18n>main.customerPackagingStock}"/>
 			</Column>
-			<Column width="18%" minScreenWidth="Tablet" demandPopin="true">
+			<Column width="18%" minScreenWidth="Desktop" demandPopin="true">
 				<Text text="{i18n>main.customerAccount}"/>
 			</Column>
-			<Column width="20%" minScreenWidth="Tablet" demandPopin="true">
+			<Column width="20%" minScreenWidth="Desktop" demandPopin="true">
 				<Text text="{i18n>main.amount}"/>
 			</Column>
 		</columns>
@@ -27,9 +27,9 @@
 					<Select width="100%"/>
 					<Select width="100%"/>
 					<Select width="100%"/>
-					<HBox>
+					<HBox width="100%">
 						<StepInput/>
-						<Button icon="sap-icon://simulate" tooltip="{i18n.main.calculate}"/>
+						<Button icon="sap-icon://simulate" tooltip="{i18n.main.calculate}" press="onOpenCalulatorPress"/>
 					</HBox>
 				</cells>
 			</ColumnListItem>

@@ -18,28 +18,55 @@
 			emptySpanS="0"
 			columnsXL="2"
 			columnsL="2"
-			columnsM="1"
+			columnsM="2"
 			singleContainerFullSize="false" 
-			validateFieldGroup="onLoadingInformationValidate">
+			validateFieldGroup="onLoadingInformationValidate"
+			class="vpUiFormRespGridNoPaddingBotton">
 			<f:content>
 				<core:Title text="{i18n>main.loadAt}" />
 				<Label text="{i18n>main.customer}" />
 				<Input showValueHelp="true" required="true" fieldGroupIds="LoadingInformation" value="{ path:'NoFioriValidationsInDefault', type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }" />
 				<Label text="{i18n>main.pickupDate}" />
-				<DateTimePicker required="true" fieldGroupIds="LoadingInformation"/> <DateTimePicker required="true" fieldGroupIds="LoadingInformation"/>
+				<DateTimePicker placeholder="{i18n>main.fromPlaceholer}" required="true" fieldGroupIds="LoadingInformation"/>
+				<DateTimePicker placeholder="{i18n>main.toPlaceholer}" required="true" fieldGroupIds="LoadingInformation"/>
 				<Label text="{i18n>main.incoterm}" />
 				<Input editable="false" required="true" fieldGroupIds="LoadingInformation"/>
 				<Label />
 				<CheckBox text="{i18n>main.transportByVetropack}" fieldGroupIds="LoadingInformation"/>
-				
+		
 				<core:Title text="{i18n>main.unloadAt}" />
 				<Label text="{i18n>main.customer}" />
 				<Input showValueHelp="true" required="true" fieldGroupIds="LoadingInformation"/>
 				<Label text="{i18n>main.deliveryDate}" />
-				<DateTimePicker required="true" fieldGroupIds="LoadingInformation"/> <DateTimePicker required="true" fieldGroupIds="LoadingInformation"/>
+				<DateTimePicker placeholder="{i18n>main.fromPlaceholer}" required="true" fieldGroupIds="LoadingInformation"/>
+				<DateTimePicker placeholder="{i18n>main.toPlaceholer}" required="true" fieldGroupIds="LoadingInformation"/>
 				<Label text="{i18n>main.owner}" />
 				<Input showValueHelp="true" required="true" fieldGroupIds="LoadingInformation"/>
-		
 			</f:content>
 		</f:SimpleForm>
+		
+		<f:SimpleForm
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanXL="2"
+			labelSpanL="2"
+			labelSpanM="12"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="0"
+			emptySpanL="0"
+			emptySpanM="0"
+			emptySpanS="0"
+			columnsXL="1"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false" 
+			validateFieldGroup="onLoadingInformationValidate"
+			class="vpUiFormRespGridNoPaddingTop">
+			<f:content>
+				<Label text="{i18n>main.comment}" />
+				<TextArea />
+			</f:content>
+		</f:SimpleForm>
+		
 </core:FragmentDefinition>

@@ -1,7 +1,6 @@
 <core:FragmentDefinition
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core" 	
-	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form">
 			<f:SimpleForm
 			editable="true"
@@ -16,16 +15,11 @@
 			emptySpanM="0"
 			emptySpanS="0"
 			columnsXL="2"
-			columnsL="2"
+			columnsL="1"
 			columnsM="1"
 			singleContainerFullSize="false" >
 			<f:content>
-				<core:Title />
 				<Label text="{i18n>main.shipmentDescription}" />
-				<TextArea />
-				
-				<core:Title  />
-				<Label text="{i18n>main.comment}" />
 				<TextArea />
 			</f:content>
 		</f:SimpleForm>

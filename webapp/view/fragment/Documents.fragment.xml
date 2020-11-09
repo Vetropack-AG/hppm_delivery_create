@@ -1,13 +1,9 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:upload="sap.m.upload">
-	<upload:UploadSet
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:hppm="zvgt.hppm.controls">
+	<hppm:UploadCollection 
+		id="UploadCollection" 
+		multiple="false" 
+		sameFilenameAllowed="false" 
 		instantUpload="false"
-		uploadEnabled="true" 
-		terminationEnabled="false">
-		<upload:toolbar>
-			<OverflowToolbar>
-				<Title text="{i18n>main.documents}" level="H2"/>
-				<ToolbarSpacer/>
-			</OverflowToolbar>
-		</upload:toolbar>
-	</upload:UploadSet>
+		duplicateFileNameError="onDuplicateFileNameError"
+		/>
 </core:FragmentDefinition>

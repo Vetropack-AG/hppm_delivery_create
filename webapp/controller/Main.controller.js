@@ -52,6 +52,15 @@ sap.ui.define([
 		 */
 		onSavePress: function () {
 			this.addSuccessMessage("test");
+
+			var oUploadCollection = this.getView().byId("UploadCollection");
+			var aFiles = oUploadCollection.getBinaryFiles();
+			console.log(aFiles);
+
+		},
+
+		onDuplicateFileNameError: function () {
+			this.showErrorMessage("Duplicate filenames are not allowed");
 		},
 
 		/**
@@ -77,7 +86,21 @@ sap.ui.define([
 		 */
 		onMessagePopoverPress: function (oEvent) {
 			this.getFragment("MessagePopover", this).openBy(oEvent.getSource());
-		}
+		},
+
+		onOpenCalulatorPress: function () {
+				var oDialog = this.getFragment("PalletsCalculatorDialog", this);
+		//	var oDialog = this.getFragment("LayersCalculatorDialog", this);
+			oDialog.getContent()[0].initialize();
+			oDialog.open();
+		},
+
+		onCalculatorOkPress: function (oEvent) {
+			var oDialog = oEvent.getSource().getParent();
+			oDialog.close();
+			var iResult = oDialog.getContent()[0].getResult();
+			console.log(iResult)
+		},
 
 		/* =========================================================== */
 		/* private methods                                             */

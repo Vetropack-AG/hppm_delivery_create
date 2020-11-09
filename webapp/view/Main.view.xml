@@ -3,7 +3,7 @@
 	<Shell id="shell">
 		<App id="app">
 			<pages>
-				<Page title="{i18n>title}">
+				<Page title="{i18n>title}" >
 					<content>
 						<uxap:ObjectPageLayout upperCaseAnchorBar="false">
 							<uxap:headerContent>

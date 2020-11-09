@@ -1,1 +1,7 @@
-/* Enter your custom styles here */
+.vpUiFormRespGridNoPaddingTop .sapUiFormResGridMain {
+	padding-top: 0 !important;
+}
+
+.vpUiFormRespGridNoPaddingBotton .sapUiFormResGridMain {
+	padding-bottom: 0 !important;
+}
