@@ -1,0 +1,17 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		title="{i18n>customerValueHelpDialog.title}"
+		search="onCustomerValueHelpSearch"
+		confirm="onCustomerValueHelpConfirm"
+		items="{Utils>/CustomerSet}">
+		<StandardListItem
+			title="{Utils>Description}"
+			description="{Utils>Key}"
+			info="{Utils>Country}"
+			iconDensityAware="false"
+			iconInset="false"
+			type="Active" />
+	</SelectDialog>
+</core:FragmentDefinition>

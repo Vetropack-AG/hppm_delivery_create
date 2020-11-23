@@ -1,55 +1,71 @@
 {
-	"welcomeFile": "/webapp/index.html",
-	"routes": [{
-		"path": "/webapp/resources/zvgt/hppm",
-		"target": {
-			"type": "application",
-			"name": "zvgthppm"
-		},
-		"description": "HPPM Controls"
-	}, {
-		"path": "/resources/zvgt/hppm",
-		"target": {
-			"type": "application",
-			"name": "zvgthppm"
-		},
-		"description": "HPPM Controls"
-	}, {
-		"path": "/resources",
-		"target": {
-			"type": "service",
-			"name": "sapui5",
-			"entryPath": "/resources",
-			"version": "1.60.18"
-		},
-		"description": "SAPUI5 Resources"
-	}, {
-		"path": "/test-resources",
-		"target": {
-			"type": "service",
-			"name": "sapui5",
-			"entryPath": "/test-resources",
-			"version": "1.60.18"
-		},
-		"description": "SAPUI5 Resources"
-	}, {
-		"path": "/webapp/resources",
-		"target": {
-			"type": "service",
-			"name": "sapui5",
-			"entryPath": "/resources",
-			"version": "1.60.18"
-		},
-		"description": "SAPUI5 Resources"
-	}, {
-		"path": "/webapp/test-resources",
-		"target": {
-			"type": "service",
-			"name": "sapui5",
-			"entryPath": "/test-resources",
-			"version": "1.60.18"
-		},
-		"description": "SAPUI5 Test Resources"
-	}],
-	"sendWelcomeFileRedirect": true
+  "welcomeFile": "/webapp/index.html",
+  "routes": [
+    {
+      "path": "/webapp/resources/zvgt/hppm",
+      "target": {
+        "type": "application",
+        "name": "zvgthppm"
+      },
+      "description": "HPPM Controls"
+    },
+    {
+      "path": "/resources/zvgt/hppm",
+      "target": {
+        "type": "application",
+        "name": "zvgthppm"
+      },
+      "description": "HPPM Controls"
+    },
+    {
+      "path": "/resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/resources",
+        "version": "1.60.9"
+      },
+      "description": "SAPUI5 Resources"
+    },
+    {
+      "path": "/test-resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/test-resources",
+        "version": "1.60.9"
+      },
+      "description": "SAPUI5 Resources"
+    },
+    {
+      "path": "/webapp/resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/resources",
+        "version": "1.60.9"
+      },
+      "description": "SAPUI5 Resources"
+    },
+    {
+      "path": "/webapp/test-resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/test-resources",
+        "version": "1.60.9"
+      },
+      "description": "SAPUI5 Test Resources"
+    },
+    {
+      "path": "/sap/opu/odata",
+      "target": {
+        "type": "destination",
+        "name": "D80_FES",
+        "entryPath": "/sap/opu/odata"
+      },
+      "description": "D80_Dev"
+    }
+  ],
+  "sendWelcomeFileRedirect": true
 }

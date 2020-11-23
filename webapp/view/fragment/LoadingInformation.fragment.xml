@@ -25,23 +25,71 @@
 			<f:content>
 				<core:Title text="{i18n>main.loadAt}" />
 				<Label text="{i18n>main.customer}" />
-				<Input showValueHelp="true" required="true" fieldGroupIds="LoadingInformation" value="{ path:'NoFioriValidationsInDefault', type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }" />
+				<Input 
+					showValueHelp="true" 
+					required="true" 
+					fieldGroupIds="LoadingInformation" 
+					valueHelpRequest="onLoadAtCustomerValueHelpRequest" 
+					change="onLoadAtCustomerChange"
+					value="{ parts: [ {path:'ShipToParty'}, {path: 'ShipToPartyText'} ], formatter:'.formatter.descriptionAndKey'}"
+					/>
+					
 				<Label text="{i18n>main.pickupDate}" />
-				<DateTimePicker placeholder="{i18n>main.fromPlaceholer}" required="true" fieldGroupIds="LoadingInformation"/>
-				<DateTimePicker placeholder="{i18n>main.toPlaceholer}" required="true" fieldGroupIds="LoadingInformation"/>
-				<Label text="{i18n>main.incoterm}" />
-				<Input editable="false" required="true" fieldGroupIds="LoadingInformation"/>
+				<DateTimePicker 
+					placeholder="{i18n>main.fromPlaceholer}" 
+					required="true" 
+					fieldGroupIds="LoadingInformation"
+					value="{ path: 'PickUpDateFrom', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
+				<DateTimePicker 
+					placeholder="{i18n>main.untilPlaceholer}" 
+					required="true" 
+					fieldGroupIds="LoadingInformation"
+					value="{ path: 'PickUpDateUntil', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
+		
+				<Label text="{i18n>main.incoterm}" labelFor="Incoterm" required="true"/>
+				<Select 
+					forceSelection="false"
+					fieldGroupIds="LoadingInformation" 
+					items="{Utils>/IncotermSet}" 
+					selectedKey="{Incoterm}" 
+					id="Incoterm">
+						<core:Item 
+							key="{Utils>Key}" 
+							text="{ parts: [ {path:'Utils>Key'}, {path: 'Utils>Description'} ], formatter:'.formatter.descriptionAndKey'}"/>
+				</Select >
 				<Label />
-				<CheckBox text="{i18n>main.transportByVetropack}" fieldGroupIds="LoadingInformation"/>
+				<CheckBox text="{i18n>main.transportByVetropack}" fieldGroupIds="LoadingInformation" select="onTransportByVetropackSelect"/>
 		
 				<core:Title text="{i18n>main.unloadAt}" />
 				<Label text="{i18n>main.customer}" />
-				<Input showValueHelp="true" required="true" fieldGroupIds="LoadingInformation"/>
+				<Input 
+					showValueHelp="true" 
+					required="true" 
+					fieldGroupIds="LoadingInformation" 
+					valueHelpRequest="onUnloadAtCustomerValueHelpRequest" 
+					change="onUnloadAtCustomerChange"
+					value="{ parts: [ {path:'SoldToParty'}, {path: 'SoldToPartyText'} ], formatter:'.formatter.descriptionAndKey'}" />
+					
 				<Label text="{i18n>main.deliveryDate}" />
-				<DateTimePicker placeholder="{i18n>main.fromPlaceholer}" required="true" fieldGroupIds="LoadingInformation"/>
-				<DateTimePicker placeholder="{i18n>main.toPlaceholer}" required="true" fieldGroupIds="LoadingInformation"/>
+				<DateTimePicker 
+					placeholder="{i18n>main.fromPlaceholer}" 
+					required="true" 
+					fieldGroupIds="LoadingInformation"
+					value="{ path: 'DeliveryDateFrom', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
+				<DateTimePicker 
+					placeholder="{i18n>main.fromPlaceholer}" 
+					required="true" 
+					fieldGroupIds="LoadingInformation"
+					value="{ path: 'DeliveryDateUntil', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
+					
 				<Label text="{i18n>main.owner}" />
-				<Input showValueHelp="true" required="true" fieldGroupIds="LoadingInformation"/>
+				<Input 
+					showValueHelp="true" 
+					required="true" 
+					fieldGroupIds="LoadingInformation"
+					valueHelpRequest="onOwnerValueHelpRequest" 
+					change="onOwnerChange"
+					value="{ parts: [ {path:'Owner'}, {path: 'OwnerText'} ], formatter:'.formatter.descriptionAndKey'}"/>
 			</f:content>
 		</f:SimpleForm>
 		

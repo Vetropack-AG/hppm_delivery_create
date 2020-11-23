@@ -1,0 +1,8 @@
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+	<edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZVGT_HPPM_DELIVERY_CREATE_SRV" xml:lang="de" sap:schema-version="1"><EntityContainer Name="ZVGT_HPPM_DELIVERY_CREATE_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self"
+			href="https://vpavd800.vetropack.corporate.ads:8001/sap/opu/odata/sap/ZVGT_HPPM_DELIVERY_CREATE_SRV/$metadata"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version"
+			href="https://vpavd800.vetropack.corporate.ads:8001/sap/opu/odata/sap/ZVGT_HPPM_DELIVERY_CREATE_SRV/$metadata"/></Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

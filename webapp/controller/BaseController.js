@@ -1,7 +1,8 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/m/MessageBox"
-], function (Controller, MessageBox) {
+	"sap/m/MessageBox",
+	"sap/base/i18n/ResourceBundle"
+], function (Controller, MessageBox, ResourceBundle) {
 	"use strict";
 
 	/**
@@ -105,10 +106,92 @@ sap.ui.define([
 
 		closeDialogByEvent: function (oEvent) {
 			oEvent.getSource().getParent().close();
-		}
+		},
+
+		getBindingContextProperty: function (oContext, sProperty) {
+			return oContext.getModel().getProperty(oContext.getPath() + "/" + sProperty);
+		},
+
+		validateFieldGroup: function (oEvent) {
+			var sId = oEvent.getParameter("fieldGroupIds")[0];
+			var oForm = this.getView().byId("LoadingInformationSimpleForm");
+			var aControls = oForm.getControlsByFieldGroupId(sId);
+			return this._validateControls(aControls);
+		},
+
+		_validateControls: function (aControls) {
+			var aMapping = aControls.map(this._validateControl, this);
+			return aMapping.every(function (bMapping) {
+				return bMapping === true;
+			});
+		},
+
+		getResourceBundle: function () {
+			if (!this._oBundle) {
+				this._oBundle = ResourceBundle.create({
+					url: jQuery.sap.getModulePath("zvgt.hppm.delivery_create") + "/i18n/i18n.properties",
+					async: false
+				});
+			}
+			return this._oBundle;
+		},
+		
+		translateText: function (sText, aParams) {
+			var oBundle = this.getResourceBundle();
+			return oBundle.getText(sText, aParams);
+		},
 
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
+
+		_validateControl: function (oControl) {
+			switch (oControl.getMetadata().getName()) {
+			case "sap.m.Input" || "sap.m.DateTimePicker":
+				return this._validateInputBase(oControl);
+			case "sap.m.DateTimePicker":
+				return this._validateDateTimePicker(oControl);
+			case "sap.m.Select":
+				return this._validateSelect(oControl);
+			default:
+				return true;
+			}
+		},
+
+		_validateInputBase: function (oControl) {
+			var sValueState = "None";
+			var oBinding = oControl.getBinding("value");
+			var oType = oBinding.getType();
+			if (oType) {
+				try {
+					oType.validateValue(oControl.getValue());
+				} catch (err) {
+					sValueState = "Error";
+				}
+			}
+			if (oControl.getRequired() && (!oControl.getValue() || oControl.getValue() === "")) {
+				sValueState = "Error";
+			}
+			oControl.setValueState(sValueState);
+			return sValueState === "Error" ? false : true;
+		},
+
+		_validateDateTimePicker: function (oControl) {
+			var sValueState = "None";
+			if (oControl.getRequired() && (!oControl.getValue() || oControl.getValue() === "")) {
+				sValueState = "Error";
+			}
+			oControl.setValueState(sValueState);
+			return sValueState === "Error" ? false : true;
+		},
+
+		_validateSelect: function (oControl) {
+			var sValueState = "None";
+			if (!oControl.getSelectedKey() || oControl.getSelectedKey() === "") {
+				sValueState = "Error";
+			}
+			oControl.setValueState(sValueState);
+			return sValueState === "Error" ? false : true;
+		}
 	});
 });
