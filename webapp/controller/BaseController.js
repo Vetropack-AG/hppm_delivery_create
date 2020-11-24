@@ -103,9 +103,17 @@ sap.ui.define([
 				this.addErrorMessage(sMessage);
 			}
 		},
-		
-		showRequestErrorMessage: function(oError) {
-			var oResponse = JSON.parse(oError.responseText); 
+
+		showSuccessMessage: function (sMessage, bPreventAddToMessageContainer) {
+			MessageBox.success(sMessage);
+
+			if (!bPreventAddToMessageContainer) {
+				this.addErrorMessage(sMessage);
+			}
+		},
+
+		showRequestErrorMessage: function (oError) {
+			var oResponse = JSON.parse(oError.responseText);
 			MessageBox.error(oResponse.error.message.value);
 		},
 

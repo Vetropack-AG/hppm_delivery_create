@@ -262,8 +262,8 @@ sap.ui.define([
 		},
 
 		_handleCreationSuccess: function (oData) {
-			this.addSuccessMessage("test");
-			console.log(oData)
+			var sMessage = this.translateText("success.deliveryCreated", [oData.DeliveryKey]);
+			this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true);
 		},
 
 		_handleCreationError: function (oError) {
