@@ -20,7 +20,7 @@
 			singleContainerFullSize="false" >
 			<f:content>
 				<Label text="{i18n>main.shipmentDescription}" />
-				<TextArea />
+				<TextArea value="{Description}" />
 			</f:content>
 		</f:SimpleForm>
 </core:FragmentDefinition>

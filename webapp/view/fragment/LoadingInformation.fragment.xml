@@ -20,7 +20,6 @@
 			columnsL="2"
 			columnsM="2"
 			singleContainerFullSize="false" 
-			validateFieldGroup="onLoadingInformationValidate"
 			class="vpUiFormRespGridNoPaddingBotton">
 			<f:content>
 				<core:Title text="{i18n>main.loadAt}" />
@@ -113,7 +112,7 @@
 			class="vpUiFormRespGridNoPaddingTop">
 			<f:content>
 				<Label text="{i18n>main.comment}" />
-				<TextArea />
+				<TextArea value="{Comment}"/>
 			</f:content>
 		</f:SimpleForm>
 		

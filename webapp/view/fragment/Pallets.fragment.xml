@@ -48,7 +48,7 @@
 					</Select>
 					
 					<HBox width="100%" id="Quantity">
-						<StepInput value="{ path:'Pallets>Quantity', type:'sap.ui.model.odata.type.Decimal' }" />
+						<StepInput value="{ path:'Pallets>Quantity', type:'sap.ui.model.odata.type.Decimal' }" min="1"/>
 						<Button icon="sap-icon://simulate" tooltip="{i18n.main.calculate}" press="onOpenCalulatorPress"/>
 					</HBox>
 				</cells>

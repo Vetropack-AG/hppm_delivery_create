@@ -274,10 +274,7 @@ sap.ui.define([
 		_createDelivery: function () {
 			var oData = this._getDeliveryHeaderData();
 			oData.Items = this._getPallets();
-
-			var oUploadCollection = this.getView().byId("UploadCollection");
-			var aFiles = oUploadCollection.getBinaryFiles();
-			console.log(aFiles);
+			oData.Files = this._getFiles();
 
 			return new Promise(function (resolve, reject) {
 				this._oDeliveryContext.getModel().create("/DeliveryHeadSet", oData, {
@@ -285,6 +282,17 @@ sap.ui.define([
 					error: reject
 				});
 			}.bind(this));
+		},
+
+		_getFiles: function () {
+			var oUploadCollection = this.getView().byId("UploadCollection");
+			return oUploadCollection.getBinaryFiles().map(function (oFile) {
+				return {
+					MimeType: oFile.mimeType,
+					Filename: oFile.fileName,
+					Base64Data: oFile.content
+				};
+			});
 		},
 
 		_validatePallets: function () {
