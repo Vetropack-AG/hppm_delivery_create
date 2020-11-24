@@ -1,10 +1,10 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<Table>
+	<Table id="Pallets" items="{Pallets>/}" mode="Delete" delete="onPalletDelete">
 		<headerToolbar>
 			<OverflowToolbar >
 				<Title text="{i18n>main.pallets}" level="H2"/>
 				<ToolbarSpacer/>
-				<Button type="Transparent" tooltip="{i18n>general.add}" icon="sap-icon://add"/>
+				<Button type="Transparent" tooltip="{i18n>general.add}" icon="sap-icon://add" press="onAddPalletPress"/>
 			</OverflowToolbar>
 		</headerToolbar>
 		<columns>
@@ -14,9 +14,6 @@
 			<Column width="18%" minScreenWidth="Desktop" demandPopin="true">
 				<Text text="{i18n>main.customerPackagingStock}"/>
 			</Column>
-			<Column width="18%" minScreenWidth="Desktop" demandPopin="true">
-				<Text text="{i18n>main.customerAccount}"/>
-			</Column>
 			<Column width="20%" minScreenWidth="Desktop" demandPopin="true">
 				<Text text="{i18n>main.amount}"/>
 			</Column>
@@ -24,11 +21,34 @@
 		<items>
 			<ColumnListItem>
 				<cells>
-					<Select width="100%"/>
-					<Select width="100%"/>
-					<Select width="100%"/>
-					<HBox width="100%">
-						<StepInput/>
+					<ComboBox width="100%" 
+						required="true"
+						id="LoadCarrierType"
+						items="{ path: 'Utils>/LoadCarrierTypeSet', templateShareable: false}" 
+						selectedKey="{Pallets>MaterialNumber}" 
+						showSecondaryValues="true" 
+						filterSecondaryValues="true"
+						selectionChange="onLoadCarrierTypeSelectionChange">
+							<core:ListItem key="{Utils>Key}" text="{Utils>Description}" additionalText="{Utils>Key}" />
+					</ComboBox>
+					<Select width="100%"
+						id="SpecialStock" 
+						change="onSpecialStockChange"
+						selectedKey="{Pallets>SpecialStock}"
+						forceSelection="false"
+						items="{
+					        path : 'Utils>/SpecialStockSet',
+					        templateShareable: false,
+					        filters : [
+					            { path : 'Key', operator : 'EQ', value1 : 'O' },
+					            { path : 'Key', operator : 'EQ', value1 : 'V' }
+					        ]
+					    }">
+							<core:Item key="{Utils>Key}" text="{Utils>Description}" />
+					</Select>
+					
+					<HBox width="100%" id="Quantity">
+						<StepInput value="{ path:'Pallets>Quantity', type:'sap.ui.model.odata.type.Decimal' }" />
 						<Button icon="sap-icon://simulate" tooltip="{i18n.main.calculate}" press="onOpenCalulatorPress"/>
 					</HBox>
 				</cells>

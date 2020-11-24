@@ -103,6 +103,11 @@ sap.ui.define([
 				this.addErrorMessage(sMessage);
 			}
 		},
+		
+		showRequestErrorMessage: function(oError) {
+			var oResponse = JSON.parse(oError.responseText); 
+			MessageBox.error(oResponse.error.message.value);
+		},
 
 		closeDialogByEvent: function (oEvent) {
 			oEvent.getSource().getParent().close();
@@ -113,17 +118,14 @@ sap.ui.define([
 		},
 
 		validateFieldGroup: function (oEvent) {
-			var sId = oEvent.getParameter("fieldGroupIds")[0];
+			var sFieldGroupId = oEvent.getParameter("fieldGroupIds")[0];
 			var oForm = this.getView().byId("LoadingInformationSimpleForm");
-			var aControls = oForm.getControlsByFieldGroupId(sId);
-			return this._validateControls(aControls);
+			return this.validateForm(oForm, sFieldGroupId);
 		},
 
-		_validateControls: function (aControls) {
-			var aMapping = aControls.map(this._validateControl, this);
-			return aMapping.every(function (bMapping) {
-				return bMapping === true;
-			});
+		validateForm: function (oForm, sFieldGroupId) {
+			var aControls = oForm.getControlsByFieldGroupId(sFieldGroupId);
+			return this._validateControls(aControls);
 		},
 
 		getResourceBundle: function () {
@@ -135,7 +137,7 @@ sap.ui.define([
 			}
 			return this._oBundle;
 		},
-		
+
 		translateText: function (sText, aParams) {
 			var oBundle = this.getResourceBundle();
 			return oBundle.getText(sText, aParams);
@@ -145,14 +147,23 @@ sap.ui.define([
 		/* private methods                                             */
 		/* =========================================================== */
 
+		_validateControls: function (aControls) {
+			var aMapping = aControls.map(this._validateControl, this);
+			return aMapping.every(function (bMapping) {
+				return bMapping === true;
+			});
+		},
+
 		_validateControl: function (oControl) {
 			switch (oControl.getMetadata().getName()) {
-			case "sap.m.Input" || "sap.m.DateTimePicker":
+			case "sap.m.Input" || "sap.m.StepInput":
 				return this._validateInputBase(oControl);
 			case "sap.m.DateTimePicker":
 				return this._validateDateTimePicker(oControl);
 			case "sap.m.Select":
 				return this._validateSelect(oControl);
+			case "sap.m.ComboBox":
+				return this._validateComboBox(oControl);
 			default:
 				return true;
 			}
@@ -188,6 +199,15 @@ sap.ui.define([
 		_validateSelect: function (oControl) {
 			var sValueState = "None";
 			if (!oControl.getSelectedKey() || oControl.getSelectedKey() === "") {
+				sValueState = "Error";
+			}
+			oControl.setValueState(sValueState);
+			return sValueState === "Error" ? false : true;
+		},
+
+		_validateComboBox: function (oControl) {
+			var sValueState = "None";
+			if (oControl.getRequired() && (!oControl.getSelectedKey() || oControl.getSelectedKey() === "")) {
 				sValueState = "Error";
 			}
 			oControl.setValueState(sValueState);

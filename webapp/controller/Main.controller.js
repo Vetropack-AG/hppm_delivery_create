@@ -41,6 +41,7 @@ sap.ui.define([
 		 */
 		onInit: function () {
 			this.getView().getModel().metadataLoaded().then(this._bindView.bind(this));
+			this._addPallet({}); // add empty pallet
 		},
 
 		/* =========================================================== */
@@ -54,16 +55,13 @@ sap.ui.define([
 		 * @name zvgt.hppm.delivery_create.controller.Main#onSavePress
 		 */
 		onSavePress: function () {
-
-			var oUploadCollection = this.getView().byId("UploadCollection");
-			var aFiles = oUploadCollection.getBinaryFiles();
-			console.log(aFiles);
-
-			if (!this._bLoadingInfoValid) {
-				this.addErrorMessage(this.translateText("error.inputInvalid"));
+			if (!this._validateInputs()) {
 				return;
 			}
-			this.addSuccessMessage("test");
+
+			this._createDelivery()
+				.then(this._handleCreationSuccess.bind(this))
+				.catch(this._handleCreationError.bind(this));
 		},
 
 		onDuplicateFileNameError: function () {
@@ -92,18 +90,21 @@ sap.ui.define([
 			this.getFragment("MessagePopover", this).openBy(oEvent.getSource());
 		},
 
-		onOpenCalulatorPress: function () {
-			var oDialog = this.getFragment("PalletsCalculatorDialog", this);
-			//	var oDialog = this.getFragment("LayersCalculatorDialog", this);
-			oDialog.getContent()[0].initialize();
-			oDialog.open();
+		onOpenCalulatorPress: function (oEvent) {
+			var oRow = oEvent.getSource().getParent().getParent(); // Button --> HBox --> Row
+			var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
+			var oContext = oComboBox.getSelectedItem().getBindingContext("Utils");
+			var sMaterialGroup = this.getBindingContextProperty(oContext, "MaterialGroup");
+			this._openCalculator(sMaterialGroup);
+
+			this._oCalculatorResultContext = oRow.getBindingContext("Pallets");
 		},
 
 		onCalculatorOkPress: function (oEvent) {
 			var oDialog = oEvent.getSource().getParent();
 			oDialog.close();
 			var iResult = oDialog.getContent()[0].getResult();
-			console.log(iResult)
+			this._oCalculatorResultContext.getModel().setProperty(this._oCalculatorResultContext.getPath() + "/Quantity", iResult);
 		},
 
 		onLoadAtCustomerValueHelpRequest: function () {
@@ -191,9 +192,176 @@ sap.ui.define([
 			}
 		},
 
+		onLoadCarrierTypeSelectionChange: function (oEvent) {
+			var oRow = oEvent.getSource().getParent();
+			var oItem = oEvent.getParameter("selectedItem");
+			var oContext = oItem.getBindingContext("Utils");
+			var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
+
+			if (sStock.length === 1) {
+				this._validateSpecialStock(oRow, sStock);
+			}
+		},
+
+		onSpecialStockChange: function (oEvent) {
+			var oRow = oEvent.getSource().getParent();
+			var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
+			var oItem = oComboBox.getSelectedItem();
+			if (oItem) {
+				var oContext = oItem.getBindingContext("Utils");
+				var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
+				if (sStock.length === 1) {
+					this._validateSpecialStock(oRow, sStock);
+				}
+			}
+		},
+
+		onAddPalletPress: function () {
+			this._addPallet({});
+		},
+
+		onPalletDelete: function (oEvent) {
+			var oItem = oEvent.getParameter("listItem");
+			var oContext = oItem.getBindingContext("Pallets");
+			var sItemKey = oContext.getProperty("ItemKey");
+			this._removePallet(sItemKey);
+		},
+
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
+
+		_validateSpecialStock: function (oRow, sStock) {
+			var oSelect = this._getSpecialStockSelectFromRow(oRow);
+			var oItem = oSelect.getSelectedItem();
+			if (oItem) {
+				var oContext = oItem.getBindingContext("Pallets");
+				var sSelectedStock = this.getBindingContextProperty(oContext, "SpecialStock");
+				Log.warning("Comparing stock types. Selected: " + sSelectedStock + " vs. MaterialStock: " + sStock);
+				if (sSelectedStock !== sStock) {
+					oSelect.setValueState("Warning");
+					oSelect.setValueStateText(this.translateText("warning.stockTypeNotMatching"));
+					return;
+				}
+			}
+			oSelect.setValueState("None");
+			oSelect.setValueStateText("");
+		},
+
+		_validateInputs: function () {
+			var oForm = this.getView().byId("LoadingInformationSimpleForm");
+			if (!this.validateForm(oForm, "LoadingInformation")) {
+				this.showErrorMessage(this.translateText("error.inputInvalid"));
+				return false;
+			}
+			if (!this._validatePallets()) {
+				this.showErrorMessage(this.translateText("error.palletsInvalid"));
+				return false;
+			}
+			return true;
+		},
+
+		_handleCreationSuccess: function (oData) {
+			this.addSuccessMessage("test");
+			console.log(oData)
+		},
+
+		_handleCreationError: function (oError) {
+			Log.error(oError);
+			this.showRequestErrorMessage(oError);
+		},
+
+		_createDelivery: function () {
+			var oData = this._getDeliveryHeaderData();
+			oData.Items = this._getPallets();
+
+			var oUploadCollection = this.getView().byId("UploadCollection");
+			var aFiles = oUploadCollection.getBinaryFiles();
+			console.log(aFiles);
+
+			return new Promise(function (resolve, reject) {
+				this._oDeliveryContext.getModel().create("/DeliveryHeadSet", oData, {
+					success: resolve,
+					error: reject
+				});
+			}.bind(this));
+		},
+
+		_validatePallets: function () {
+			if (this._getPallets().length === 0 || !this._getPallets()) {
+				return false;
+			}
+			var aControls = [];
+			this.getView().byId("Pallets").getItems().forEach(function (oItem) {
+				aControls = aControls.concat(oItem.getCells());
+			});
+			return this._validateControls(aControls);
+		},
+
+		_removePallet: function (sKey) {
+			var aPallets = this._getPallets();
+			for (var i = 0; i < aPallets.length; i++) {
+				var oPallet = aPallets[i];
+				if (oPallet.ItemKey === sKey) {
+					aPallets.splice(i, 1);
+					break;
+				}
+			}
+			this._setPallets(aPallets);
+		},
+
+		_setPallets: function (aPallets) {
+			this.getView().getModel("Pallets").setProperty("/", aPallets);
+		},
+
+		_getPallets: function () {
+			return this.getView().getModel("Pallets").getProperty("/");
+		},
+
+		_addPallet: function (oPallet) {
+			var aPallets = this.getView().getModel("Pallets").getProperty("/");
+			if (!aPallets || !aPallets.length) {
+				aPallets = [];
+			}
+			oPallet.ItemKey = (aPallets.length + 1).toString();
+			aPallets.push(oPallet);
+			this.getView().getModel("Pallets").setProperty("/", aPallets);
+		},
+
+		_openCalculator: function (sMaterialGroup) {
+			var sId = this._determineCalculatorFragment(sMaterialGroup);
+			if (sId) {
+				var oDialog = this.getFragment(sId, this);
+				oDialog.getContent()[0].initialize();
+				oDialog.open();
+			}
+		},
+
+		_determineCalculatorFragment: function (sMaterialGroup) {
+			if (!sMaterialGroup) {
+				return undefined;
+			}
+			if (sMaterialGroup.indexOf("PALLE") !== -1) {
+				return "PalletsCalculatorDialog";
+			} else if (sMaterialGroup.indexOf("LAYER") !== -1) {
+				return "LayersCalculatorDialog";
+			}
+			return undefined;
+		},
+
+		_getSpecialStockSelectFromRow: function (oRow) {
+			return this._getCellFromRow(oRow, "SpecialStock");
+		},
+
+		_getSpecialLoadCarrierTypeComboBoxFromRow: function (oRow) {
+			return this._getCellFromRow(oRow, "LoadCarrierType");
+		},
+
+		_getCellFromRow: function (oRow, sId) {
+			return oRow.getCells().find(function (oCell) {
+				return oCell.getId().indexOf(sId) !== -1;
+			});
+		},
 
 		_handleCustomerChange: function (oEvent, sProperty) {
 			var sValue = oEvent.getParameter("value");
@@ -241,10 +409,19 @@ sap.ui.define([
 			this._oDeliveryContext.getModel().setProperty(this._oDeliveryContext.getPath() + "/" + sProperty, value);
 		},
 
+		_getDeliveryProperty: function (sProperty) {
+			return this._oDeliveryContext.getModel().getProperty(this._oDeliveryContext.getPath() + "/" + sProperty);
+		},
+
+		_getDeliveryHeaderData: function () {
+			return this._oDeliveryContext.getModel().getProperty(this._oDeliveryContext.getPath() + "/");
+		},
+
 		_bindView: function () {
 			var oModel = this.getView().getModel();
 			this._oDeliveryContext = oModel.createEntry("/DeliveryHeadSet");
 			this.getView().setBindingContext(this._oDeliveryContext);
 		}
+
 	});
 });
