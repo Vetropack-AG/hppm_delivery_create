@@ -42,7 +42,7 @@
 							</contentLeft>
 							<contentRight>
 								<Button text="{i18n>general.save}" type="Emphasized" press="onSavePress"/>
-								<Button text="{i18n>general.cancel}" type="Reject"/>
+								<Button text="{i18n>general.cancel}" type="Reject" press="onCancelPress"/>
 							</contentRight>
 						</Bar>
 					</footer>

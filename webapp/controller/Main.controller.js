@@ -40,6 +40,8 @@ sap.ui.define([
 		 * @method
 		 */
 		onInit: function () {
+			console.log(this.getOwnerComponent().getContentDensityClass())
+			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
 			this.getView().getModel().metadataLoaded().then(this._bindView.bind(this));
 			this._addPallet({}); // add empty pallet
 		},
@@ -93,18 +95,23 @@ sap.ui.define([
 		onOpenCalulatorPress: function (oEvent) {
 			var oRow = oEvent.getSource().getParent().getParent(); // Button --> HBox --> Row
 			var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
-			var oContext = oComboBox.getSelectedItem().getBindingContext("Utils");
-			var sMaterialGroup = this.getBindingContextProperty(oContext, "MaterialGroup");
-			this._openCalculator(sMaterialGroup);
-
-			this._oCalculatorResultContext = oRow.getBindingContext("Pallets");
+			var oSelectedItem = oComboBox.getSelectedItem();
+			if (oSelectedItem) {
+				var oContext = oSelectedItem.getBindingContext("Utils");
+				var sMaterialGroup = this.getBindingContextProperty(oContext, "MaterialGroup");
+				this._openCalculator(sMaterialGroup);
+				this._oCalculatorResultContext = oRow.getBindingContext("Pallets");
+			} else {
+				Log.warning("Could not open calculator because no material was selected");
+				oComboBox.setValueState("Error");
+			}
 		},
 
 		onCalculatorOkPress: function (oEvent) {
 			var oDialog = oEvent.getSource().getParent();
 			oDialog.close();
 			var iResult = oDialog.getContent()[0].getResult();
-			this._oCalculatorResultContext.getModel().setProperty(this._oCalculatorResultContext.getPath() + "/Quantity", iResult);
+			this._oCalculatorResultContext.getModel().setProperty(this._oCalculatorResultContext.getPath() + "/Quantity", iResult.toString());
 		},
 
 		onLoadAtCustomerValueHelpRequest: function () {
@@ -121,7 +128,7 @@ sap.ui.define([
 
 		onUnloadAtCustomerValueHelpRequest: function () {
 			var oDialog = this.getFragment("CustomerValueHelpDialog", this);
-			oDialog.getBinding("items").filter([]);
+			oDialog.getBinding("items").filter(this._getUnloadAtCustomerFilter());
 			oDialog.open();
 
 			oDialog.removeAllCustomData();
@@ -131,19 +138,39 @@ sap.ui.define([
 			}));
 		},
 
+		_getUnloadAtCustomerFilter: function () {
+			return [
+				new sap.ui.model.Filter({
+					path: "AccountGroup",
+					operator: "EQ",
+					value1: "0120"
+				})
+			];
+		},
+
 		onOwnerValueHelpRequest: function () {
-			var oDialog = this.getFragment("CustomerValueHelpDialog", this);
+			var oDialog = this.getFragment("PlantValueHelpDialog", this);
 			oDialog.getBinding("items").filter([]);
 			oDialog.open();
+		},
 
-			oDialog.removeAllCustomData();
-			oDialog.addCustomData(new sap.ui.core.CustomData({
-				key: "owner",
-				value: true
-			}));
+		onOwnerValueHelpConfirm: function (oEvent) {
+			var oContext = oEvent.getParameter("selectedContexts")[0];
+			var sKey = this.getBindingContextProperty(oContext, "Key");
+			var sDescription = this.getBindingContextProperty(oContext, "Description");
+			this._setDeliveryProperty("Owner", sKey);
+			this._setDeliveryProperty("OwnerText", sDescription);
+		},
+
+		onOwnerValueHelpSearch: function (oEvent) {
+			this._handleStandardValueHelpSearch(oEvent);
 		},
 
 		onCustomerValueHelpSearch: function (oEvent) {
+			this._handleStandardValueHelpSearch(oEvent);
+		},
+
+		_handleStandardValueHelpSearch: function (oEvent) {
 			var oFilter = [
 				new sap.ui.model.Filter({
 					path: "Description",
@@ -171,25 +198,20 @@ sap.ui.define([
 		},
 
 		onLoadAtCustomerChange: function (oEvent) {
-			this._handleCustomerChange(oEvent, "ShipToParty");
-		},
-
-		onUnloadAtCustomerChange: function (oEvent) {
 			this._handleCustomerChange(oEvent, "SoldToParty");
 		},
 
-		onOwnerChange: function (oEvent) {
-			this._handleCustomerChange(oEvent, "Owner");
+		onUnloadAtCustomerChange: function (oEvent) {
+			this._handleCustomerChange(oEvent, "ShipToParty");
 		},
 
-		onTransportByVetropackSelect: function (oEvent) {
-			if (oEvent.getParameter("selected")) {
-				this._setDeliveryProperty("Incoterm", "FCA");
-				this.getView().byId("Incoterm").setEnabled(false);
-			} else {
-				this._setDeliveryProperty("Incoterm", undefined);
-				this.getView().byId("Incoterm").setEnabled(true);
-			}
+		onOwnerChange: function (oEvent) {
+			this._handleOwnerChange(oEvent);
+		},
+
+		onTransportBySelect: function (oEvent) {
+			var sIncoterm = oEvent.getParameter("selectedIndex") === 0 ? "FCA" : "DAP";
+			this._setDeliveryProperty("Incoterm", sIncoterm);
 		},
 
 		onLoadCarrierTypeSelectionChange: function (oEvent) {
@@ -197,6 +219,7 @@ sap.ui.define([
 			var oItem = oEvent.getParameter("selectedItem");
 			var oContext = oItem.getBindingContext("Utils");
 			var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
+			oEvent.getSource().setValueState("None");
 
 			if (sStock.length === 1) {
 				this._validateSpecialStock(oRow, sStock);
@@ -227,9 +250,28 @@ sap.ui.define([
 			this._removePallet(sItemKey);
 		},
 
+		onCancelPress: function () {
+			this._resetData();
+		},
+
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
+
+		_resetData: function () {
+			this.getView().getModel().resetChanges();
+			this._resetPallets();
+			this._resetFiles();
+		},
+
+		_resetPallets: function () {
+			this._setPallets([]);
+			this._addPallet({}); // add empty pallet
+		},
+
+		_resetFiles: function () {
+			this.getView().byId("UploadCollection").removeAllItems();
+		},
 
 		_validateSpecialStock: function (oRow, sStock) {
 			var oSelect = this._getSpecialStockSelectFromRow(oRow);
@@ -263,7 +305,9 @@ sap.ui.define([
 
 		_handleCreationSuccess: function (oData) {
 			var sMessage = this.translateText("success.deliveryCreated", [oData.DeliveryKey]);
-			this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true);
+			this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true)
+				//		.then(this._resetData.bind(this));
+
 		},
 
 		_handleCreationError: function (oError) {
@@ -387,9 +431,33 @@ sap.ui.define([
 			}
 		},
 
+		_handleOwnerChange: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oInput = oEvent.getSource();
+			if (sValue) {
+				this._getOwner(sValue)
+					.then(function (oData) {
+						this._setDeliveryProperty("Owner", oData.Key);
+						this._setDeliveryProperty("OwnerText", oData.Description);
+						oInput.setValueState("None");
+					}.bind(this))
+					.catch(function () {
+						oInput.setValueState("Error");
+					});
+			}
+		},
+
+		_getOwner: function (sKey) {
+			return this._getValueHelpEntity(sKey, "PlantSet");
+		},
+
 		_getCustomer: function (sKey) {
+			return this._getValueHelpEntity(sKey, "CustomerSet");
+		},
+
+		_getValueHelpEntity: function (sKey, sEntitySet) {
 			var oUtilsModel = this.getView().getModel("Utils");
-			var sPath = oUtilsModel.createKey("/CustomerSet", {
+			var sPath = oUtilsModel.createKey("/" + sEntitySet, {
 				Key: sKey
 			});
 			return new Promise(function (resolve, reject) {
@@ -403,11 +471,9 @@ sap.ui.define([
 		_getCustomerProperty: function (oCustomData) {
 			switch (oCustomData.getKey()) {
 			case "load":
-				return "ShipToParty";
-			case "unload":
 				return "SoldToParty";
-			case "owner":
-				return "Owner";
+			case "unload":
+				return "ShipToParty";
 			default:
 				throw new Error("Customer property not known: " + oCustomData.getKey());
 			}

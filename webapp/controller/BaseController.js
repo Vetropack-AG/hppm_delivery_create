@@ -97,19 +97,25 @@ sap.ui.define([
 		},
 
 		showErrorMessage: function (sMessage, bPreventAddToMessageContainer) {
-			MessageBox.error(sMessage);
-
 			if (!bPreventAddToMessageContainer) {
 				this.addErrorMessage(sMessage);
 			}
+			return new Promise(function (resolve) {
+				MessageBox.error(sMessage, {
+					onClose: resolve
+				});
+			});
 		},
 
 		showSuccessMessage: function (sMessage, bPreventAddToMessageContainer) {
-			MessageBox.success(sMessage);
-
 			if (!bPreventAddToMessageContainer) {
-				this.addErrorMessage(sMessage);
+				this.addSuccessMessage(sMessage);
 			}
+			return new Promise(function (resolve) {
+				MessageBox.success(sMessage, {
+					onClose: resolve
+				});
+			});
 		},
 
 		showRequestErrorMessage: function (oError) {
@@ -172,6 +178,8 @@ sap.ui.define([
 				return this._validateSelect(oControl);
 			case "sap.m.ComboBox":
 				return this._validateComboBox(oControl);
+			case "sap.m.RadioButtonGroup":
+				return this._validateRadioButtonGroup(oControl);
 			default:
 				return true;
 			}
@@ -216,6 +224,15 @@ sap.ui.define([
 		_validateComboBox: function (oControl) {
 			var sValueState = "None";
 			if (oControl.getRequired() && (!oControl.getSelectedKey() || oControl.getSelectedKey() === "")) {
+				sValueState = "Error";
+			}
+			oControl.setValueState(sValueState);
+			return sValueState === "Error" ? false : true;
+		},
+
+		_validateRadioButtonGroup: function (oControl) {
+			var sValueState = "None";
+			if (oControl.getSelectedIndex() === -1) {
 				sValueState = "Error";
 			}
 			oControl.setValueState(sValueState);

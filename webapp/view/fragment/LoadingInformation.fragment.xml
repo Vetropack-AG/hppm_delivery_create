@@ -30,7 +30,7 @@
 					fieldGroupIds="LoadingInformation" 
 					valueHelpRequest="onLoadAtCustomerValueHelpRequest" 
 					change="onLoadAtCustomerChange"
-					value="{ parts: [ {path:'ShipToParty'}, {path: 'ShipToPartyText'} ], formatter:'.formatter.descriptionAndKey'}"
+					value="{ parts: [ {path:'SoldToParty'}, {path: 'SoldToPartyText'} ], formatter:'.formatter.descriptionAndKey'}"
 					/>
 					
 				<Label text="{i18n>main.pickupDate}" />
@@ -44,30 +44,22 @@
 					required="true" 
 					fieldGroupIds="LoadingInformation"
 					value="{ path: 'PickUpDateUntil', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
-		
-				<Label text="{i18n>main.incoterm}" labelFor="Incoterm" required="true"/>
-				<Select 
-					forceSelection="false"
-					fieldGroupIds="LoadingInformation" 
-					items="{Utils>/IncotermSet}" 
-					selectedKey="{Incoterm}" 
-					id="Incoterm">
-						<core:Item 
-							key="{Utils>Key}" 
-							text="{ parts: [ {path:'Utils>Key'}, {path: 'Utils>Description'} ], formatter:'.formatter.descriptionAndKey'}"/>
-				</Select >
-				<Label />
-				<CheckBox text="{i18n>main.transportByVetropack}" fieldGroupIds="LoadingInformation" select="onTransportByVetropackSelect"/>
+				
+				<Label text="{i18n>main.transportBy}"/>
+				<RadioButtonGroup columns="2" select="onTransportBySelect" selectedIndex="-1" fieldGroupIds="LoadingInformation">
+					<RadioButton  text="{i18n>main.transportByVetropack}" />
+					<RadioButton  text="{i18n>main.transportByCustomer}" />
+				</RadioButtonGroup>
 		
 				<core:Title text="{i18n>main.unloadAt}" />
-				<Label text="{i18n>main.customer}" />
+				<Label text="{i18n>main.location}" />
 				<Input 
 					showValueHelp="true" 
 					required="true" 
 					fieldGroupIds="LoadingInformation" 
 					valueHelpRequest="onUnloadAtCustomerValueHelpRequest" 
 					change="onUnloadAtCustomerChange"
-					value="{ parts: [ {path:'SoldToParty'}, {path: 'SoldToPartyText'} ], formatter:'.formatter.descriptionAndKey'}" />
+					value="{ parts: [ {path:'ShipToParty'}, {path: 'ShipToPartyText'} ], formatter:'.formatter.descriptionAndKey'}" />
 					
 				<Label text="{i18n>main.deliveryDate}" />
 				<DateTimePicker 
@@ -76,7 +68,7 @@
 					fieldGroupIds="LoadingInformation"
 					value="{ path: 'DeliveryDateFrom', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
 				<DateTimePicker 
-					placeholder="{i18n>main.fromPlaceholer}" 
+					placeholder="{i18n>main.untilPlaceholer}" 
 					required="true" 
 					fieldGroupIds="LoadingInformation"
 					value="{ path: 'DeliveryDateUntil', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>

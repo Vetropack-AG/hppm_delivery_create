@@ -1,0 +1,16 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		title="{i18n>plantValueHelpDialog.title}"
+		search="onOwnerValueHelpSearch"
+		confirm="onOwnerValueHelpConfirm"
+		items="{Utils>/PlantSet}">
+		<StandardListItem
+			title="{Utils>Description}"
+			description="{Utils>Key}"
+			iconDensityAware="false"
+			iconInset="false"
+			type="Active" />
+	</SelectDialog>
+</core:FragmentDefinition>
