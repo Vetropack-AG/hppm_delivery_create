@@ -44,6 +44,12 @@
 					required="true" 
 					fieldGroupIds="LoadingInformation"
 					value="{ path: 'PickUpDateUntil', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
+					
+				<Label text="{i18n>main.customerDeliveryNo}" />
+				<Input 
+					required="true" 
+					fieldGroupIds="LoadingInformation"
+					value="{CustomerDelivery}"/>
 				
 				<Label text="{i18n>main.transportBy}"/>
 				<RadioButtonGroup columns="2" select="onTransportBySelect" selectedIndex="-1" fieldGroupIds="LoadingInformation">
@@ -81,6 +87,12 @@
 					valueHelpRequest="onOwnerValueHelpRequest" 
 					change="onOwnerChange"
 					value="{ parts: [ {path:'Owner'}, {path: 'OwnerText'} ], formatter:'.formatter.descriptionAndKey'}"/>
+					
+				<Label text="{i18n>main.truckNo}" />
+				<Input 
+					required="true" 
+					fieldGroupIds="LoadingInformation"
+					value="{TruckNumber}"/>
 			</f:content>
 		</f:SimpleForm>
 		
