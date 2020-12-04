@@ -20,13 +20,6 @@
 				"settings": {
 					"localUri": "localService/metadata.xml"
 				}
-			},
-			"ZVGT_HPPM_UTILS_SRV": {
-				"uri": "/sap/opu/odata/sap/ZVGT_HPPM_UTILS_SRV/",
-				"type": "OData",
-				"settings": {
-					"localUri": "localService/ZVGT_HPPM_UTILS_SRV/metadata.xml"
-				}
 			}
 		}
 	},
@@ -84,16 +77,6 @@
 				"dataSource": "ZVGT_HPPM_DELIVERY_CREATE_SRV",
 				"preload": true
 			},
-			"Utils": {
-				"type": "sap.ui.model.odata.v2.ODataModel",
-				"settings": {
-					"defaultOperationMode": "Server",
-					"defaultBindingMode": "OneWay",
-					"defaultCountMode": "None"
-				},
-				"dataSource": "ZVGT_HPPM_UTILS_SRV",
-				"preload": true
-			},
 			"Pallets": {
 				"type": "sap.ui.model.json.JSONModel",
 				"settings": {},
@@ -101,11 +84,9 @@
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		},
 		"routing": {
 			"config": {
@@ -117,15 +98,11 @@
 				"controlId": "app",
 				"clearControlAggregation": false
 			},
-			"routes": [
-				{
-					"name": "RouteMain",
-					"pattern": "RouteMain",
-					"target": [
-						"TargetMain"
-					]
-				}
-			],
+			"routes": [{
+				"name": "RouteMain",
+				"pattern": "RouteMain",
+				"target": ["TargetMain"]
+			}],
 			"targets": {
 				"TargetMain": {
 					"viewType": "XML",

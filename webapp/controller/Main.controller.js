@@ -40,7 +40,6 @@ sap.ui.define([
 		 * @method
 		 */
 		onInit: function () {
-			console.log(this.getOwnerComponent().getContentDensityClass())
 			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
 			this.getView().getModel().metadataLoaded().then(this._bindView.bind(this));
 			this._addPallet({}); // add empty pallet
@@ -97,7 +96,7 @@ sap.ui.define([
 			var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
 			var oSelectedItem = oComboBox.getSelectedItem();
 			if (oSelectedItem) {
-				var oContext = oSelectedItem.getBindingContext("Utils");
+				var oContext = oSelectedItem.getBindingContext();
 				var sMaterialGroup = this.getBindingContextProperty(oContext, "MaterialGroup");
 				this._openCalculator(sMaterialGroup);
 				this._oCalculatorResultContext = oRow.getBindingContext("Pallets");
@@ -170,22 +169,6 @@ sap.ui.define([
 			this._handleStandardValueHelpSearch(oEvent);
 		},
 
-		_handleStandardValueHelpSearch: function (oEvent) {
-			var oFilter = [
-				new sap.ui.model.Filter({
-					path: "Description",
-					operator: "Contains",
-					value1: oEvent.getParameter("value")
-				}),
-				new sap.ui.model.Filter({
-					path: "Key",
-					operator: "Contains",
-					value1: oEvent.getParameter("value")
-				})
-			];
-			oEvent.getParameter("itemsBinding").filter(oFilter);
-		},
-
 		onCustomerValueHelpConfirm: function (oEvent) {
 			var oDialog = this.getFragment("CustomerValueHelpDialog", this);
 			var oCustomData = oDialog.getCustomData()[0];
@@ -217,7 +200,7 @@ sap.ui.define([
 		onLoadCarrierTypeSelectionChange: function (oEvent) {
 			var oRow = oEvent.getSource().getParent();
 			var oItem = oEvent.getParameter("selectedItem");
-			var oContext = oItem.getBindingContext("Utils");
+			var oContext = oItem.getBindingContext();
 			var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
 			oEvent.getSource().setValueState("None");
 
@@ -231,7 +214,7 @@ sap.ui.define([
 			var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
 			var oItem = oComboBox.getSelectedItem();
 			if (oItem) {
-				var oContext = oItem.getBindingContext("Utils");
+				var oContext = oItem.getBindingContext();
 				var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
 				if (sStock.length === 1) {
 					this._validateSpecialStock(oRow, sStock);
@@ -257,6 +240,22 @@ sap.ui.define([
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
+
+		_handleStandardValueHelpSearch: function (oEvent) {
+			var oFilter = [
+				new sap.ui.model.Filter({
+					path: "Description",
+					operator: "Contains",
+					value1: oEvent.getParameter("value")
+				}),
+				new sap.ui.model.Filter({
+					path: "Key",
+					operator: "Contains",
+					value1: oEvent.getParameter("value")
+				})
+			];
+			oEvent.getParameter("itemsBinding").filter(oFilter);
+		},
 
 		_resetData: function () {
 			this.getView().getModel().resetChanges();
@@ -304,13 +303,15 @@ sap.ui.define([
 		},
 
 		_handleCreationSuccess: function (oData) {
+			sap.ui.core.BusyIndicator.hide();
 			var sMessage = this.translateText("success.deliveryCreated", [oData.DeliveryKey]);
 			this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true)
-				//		.then(this._resetData.bind(this));
+				.then(this._resetData.bind(this));
 
 		},
 
 		_handleCreationError: function (oError) {
+			sap.ui.core.BusyIndicator.hide();
 			Log.error(oError);
 			this.showRequestErrorMessage(oError);
 		},
@@ -320,6 +321,7 @@ sap.ui.define([
 			oData.Items = this._getPallets();
 			oData.Files = this._getFiles();
 
+			sap.ui.core.BusyIndicator.show(0);
 			return new Promise(function (resolve, reject) {
 				this._oDeliveryContext.getModel().create("/DeliveryHeadSet", oData, {
 					success: resolve,
@@ -448,15 +450,15 @@ sap.ui.define([
 		},
 
 		_getOwner: function (sKey) {
-			return this._getValueHelpEntity(sKey, "PlantSet");
+			return this._getValueHelpEntity(sKey, "PlantValueHelpSet");
 		},
 
 		_getCustomer: function (sKey) {
-			return this._getValueHelpEntity(sKey, "CustomerSet");
+			return this._getValueHelpEntity(sKey, "CustomerValueHelpSet");
 		},
 
 		_getValueHelpEntity: function (sKey, sEntitySet) {
-			var oUtilsModel = this.getView().getModel("Utils");
+			var oUtilsModel = this.getView().getModel();
 			var sPath = oUtilsModel.createKey("/" + sEntitySet, {
 				Key: sKey
 			});

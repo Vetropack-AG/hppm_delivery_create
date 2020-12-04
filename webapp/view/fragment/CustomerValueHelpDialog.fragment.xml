@@ -5,11 +5,11 @@
 		title="{i18n>customerValueHelpDialog.title}"
 		search="onCustomerValueHelpSearch"
 		confirm="onCustomerValueHelpConfirm"
-		items="{Utils>/CustomerSet}">
+		items="{/CustomerValueHelpSet}">
 		<StandardListItem
-			title="{Utils>Description}"
-			description="{Utils>Key}"
-			info="{Utils>Country}"
+			title="{Description}"
+			description="{Key}"
+			info="{Country}"
 			iconDensityAware="false"
 			iconInset="false"
 			type="Active" />

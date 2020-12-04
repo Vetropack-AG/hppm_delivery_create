@@ -24,12 +24,12 @@
 					<ComboBox width="100%" 
 						required="true"
 						id="LoadCarrierType"
-						items="{ path: 'Utils>/LoadCarrierTypeSet', templateShareable: false}" 
+						items="{ path: '/LoadCarrierTypeValueHelpSet', templateShareable: false}" 
 						selectedKey="{Pallets>MaterialNumber}" 
 						showSecondaryValues="true" 
 						filterSecondaryValues="true"
 						selectionChange="onLoadCarrierTypeSelectionChange">
-							<core:ListItem key="{Utils>Key}" text="{Utils>Description}" additionalText="{Utils>Key}" />
+							<core:ListItem key="{Key}" text="{Description}" additionalText="{Key}" />
 					</ComboBox>
 					<Select width="100%"
 						id="SpecialStock" 
@@ -37,14 +37,14 @@
 						selectedKey="{Pallets>SpecialStock}"
 						forceSelection="false"
 						items="{
-					        path : 'Utils>/SpecialStockSet',
+					        path : '/SpecialStockValueHelpSet',
 					        templateShareable: false,
 					        filters : [
 					            { path : 'Key', operator : 'EQ', value1 : 'O' },
 					            { path : 'Key', operator : 'EQ', value1 : 'V' }
 					        ]
 					    }">
-							<core:Item key="{Utils>Key}" text="{Utils>Description}" />
+							<core:Item key="{Key}" text="{Description}" />
 					</Select>
 					
 					<HBox width="100%" id="Quantity">

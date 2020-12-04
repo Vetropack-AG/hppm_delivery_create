@@ -5,10 +5,10 @@
 		title="{i18n>plantValueHelpDialog.title}"
 		search="onOwnerValueHelpSearch"
 		confirm="onOwnerValueHelpConfirm"
-		items="{Utils>/PlantSet}">
+		items="{/PlantValueHelpSet}">
 		<StandardListItem
-			title="{Utils>Description}"
-			description="{Utils>Key}"
+			title="{Description}"
+			description="{Key}"
 			iconDensityAware="false"
 			iconInset="false"
 			type="Active" />
