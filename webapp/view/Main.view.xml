@@ -27,7 +27,7 @@
 									<uxap:subSections>
 										<uxap:ObjectPageSubSection titleUppercase="false">
 											<uxap:blocks>
-												<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Documents" type="XML"/>
+												<!--<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Documents" type="XML"/>-->
 											</uxap:blocks>
 										</uxap:ObjectPageSubSection>
 									</uxap:subSections>

@@ -1,7 +1,7 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"zvgt/hppm/delivery_create/model/models",
-		"sap/ui/Device"
+	"sap/ui/Device"
 ], function (UIComponent, models, Device) {
 	"use strict";
 
@@ -52,6 +52,13 @@ sap.ui.define([
 		/* private methods                                             */
 		/* =========================================================== */
 
+		registerLib: function () {
+			if (window.location.href.indexOf("webidetesting") === -1) {
+				jQuery.sap.registerModulePath("zvgt.hppm", "/sap/bc/ui5_ui5/sap/zvgt_controls/");
+				jQuery.sap.require("zvgt_controls.library-preload");
+			}
+		},
+
 		/**
 		 * Registers the messsage manager to the app.
 		 * @private
@@ -65,11 +72,11 @@ sap.ui.define([
 			oMessageManager.registerMessageProcessor(oMessageProcessor);
 			this.setModel(sap.ui.getCore().getMessageManager().getMessageModel(), "message");
 		},
-		
-				/**
+
+		/**
 		 * Getter for the contentDensity CSS class for the application.
 		 * @returns {string} The CSS class.
-	 * @name zvgt.hppm.delivery_create.Component#getContentDensityClass
+		 * @name zvgt.hppm.delivery_create.Component#getContentDensityClass
 		 * @public
 		 * @method
 		 */

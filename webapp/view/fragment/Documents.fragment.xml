@@ -1,9 +1,9 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:hppm="zvgt.hppm.controls">
-	<hppm:UploadCollection 
-		id="UploadCollection" 
-		multiple="false" 
-		sameFilenameAllowed="false" 
-		instantUpload="false"
-		duplicateFileNameError="onDuplicateFileNameError"
-		/>
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" >
+	<!--<hppm:UploadCollection -->
+	<!--	id="UploadCollection" -->
+	<!--	multiple="false" -->
+	<!--	sameFilenameAllowed="false" -->
+	<!--	instantUpload="false"-->
+	<!--	duplicateFileNameError="onDuplicateFileNameError"-->
+	<!--	/>  xmlns:hppm="zvgt.hppm.controls" -->
 </core:FragmentDefinition>

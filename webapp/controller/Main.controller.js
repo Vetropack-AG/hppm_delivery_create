@@ -269,7 +269,10 @@ sap.ui.define([
 		},
 
 		_resetFiles: function () {
-			this.getView().byId("UploadCollection").removeAllItems();
+			var oUploadCollection = this.getView().byId("UploadCollection");
+			if (oUploadCollection) {
+				oUploadCollection.removeAllItems();
+			}
 		},
 
 		_validateSpecialStock: function (oRow, sStock) {
@@ -305,8 +308,8 @@ sap.ui.define([
 		_handleCreationSuccess: function (oData) {
 			sap.ui.core.BusyIndicator.hide();
 			var sMessage = this.translateText("success.deliveryCreated", [oData.DeliveryKey]);
-			this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true)
-				.then(this._resetData.bind(this));
+			this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true);
+				//.then(this._resetData.bind(this));
 
 		},
 
@@ -332,6 +335,9 @@ sap.ui.define([
 
 		_getFiles: function () {
 			var oUploadCollection = this.getView().byId("UploadCollection");
+			if (!oUploadCollection) {
+				return [];
+			}
 			return oUploadCollection.getBinaryFiles().map(function (oFile) {
 				return {
 					MimeType: oFile.mimeType,
