@@ -383,7 +383,6 @@ sap.ui.define([
 			if (!aPallets || !aPallets.length) {
 				aPallets = [];
 			}
-			oPallet.ItemKey = (aPallets.length + 1).toString();
 			aPallets.push(oPallet);
 			this.getView().getModel("Pallets").setProperty("/", aPallets);
 		},
