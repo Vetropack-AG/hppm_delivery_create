@@ -3,50 +3,46 @@
 	<Shell id="shell">
 		<App id="app">
 			<pages>
-				<Page title="{i18n>title}" >
-					<content>
-						<uxap:ObjectPageLayout upperCaseAnchorBar="false">
-							<uxap:headerContent>
-								<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.SmartVariant" type="XML"/>
-							</uxap:headerContent>
-							<uxap:sections>
-								<uxap:ObjectPageSection titleUppercase="false" title="{i18n>main.returnInformation}">
-									<uxap:subSections>
-										<uxap:ObjectPageSubSection titleUppercase="false">
-											<uxap:blocks>
-												<VBox>
-													<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.LoadingInformation" type="XML"/>
-													<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Pallets" type="XML"/>
-													<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Comments" type="XML"/>
-												</VBox>
-											</uxap:blocks>
-										</uxap:ObjectPageSubSection>
-									</uxap:subSections>
-								</uxap:ObjectPageSection>
-								<uxap:ObjectPageSection titleUppercase="false" title="{i18n>main.documents}" showTitle="false">
-									<uxap:subSections>
-										<uxap:ObjectPageSubSection titleUppercase="false">
-											<uxap:blocks>
-												<!--<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Documents" type="XML"/>-->
-											</uxap:blocks>
-										</uxap:ObjectPageSubSection>
-									</uxap:subSections>
-								</uxap:ObjectPageSection>
-							</uxap:sections>
-						</uxap:ObjectPageLayout>
-					</content>
-					<footer>
+				<uxap:ObjectPageLayout upperCaseAnchorBar="false" showFooter="true">
+					<uxap:headerContent>
+						<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.SmartVariant" type="XML"/>
+					</uxap:headerContent>
+					<uxap:sections>
+						<uxap:ObjectPageSection titleUppercase="false" title="{i18n>main.returnInformation}">
+							<uxap:subSections>
+								<uxap:ObjectPageSubSection titleUppercase="false">
+									<uxap:blocks>
+										<VBox>
+											<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.LoadingInformation" type="XML"/>
+											<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Pallets" type="XML"/>
+											<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Comments" type="XML"/>
+										</VBox>
+									</uxap:blocks>
+								</uxap:ObjectPageSubSection>
+							</uxap:subSections>
+						</uxap:ObjectPageSection>
+						<uxap:ObjectPageSection titleUppercase="false" title="{i18n>main.documents}" showTitle="false">
+							<uxap:subSections>
+								<uxap:ObjectPageSubSection titleUppercase="false">
+									<uxap:blocks>
+										<!--<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Documents" type="XML"/>-->
+									</uxap:blocks>
+								</uxap:ObjectPageSubSection>
+							</uxap:subSections>
+						</uxap:ObjectPageSection>
+					</uxap:sections>
+					<uxap:footer>
 						<Bar>
 							<contentLeft>
 								<Button icon="sap-icon://alert" text="{= ${message>/}.length }" press="onMessagePopoverPress"/>
 							</contentLeft>
 							<contentRight>
-								<Button text="{i18n>general.save}" type="Emphasized" press="onSavePress"/>
+								<Button text="{i18n>general.save}" type="Accept" press="onSavePress"/>
 								<Button text="{i18n>general.cancel}" type="Reject" press="onCancelPress"/>
 							</contentRight>
 						</Bar>
-					</footer>
-				</Page>
+					</uxap:footer>
+				</uxap:ObjectPageLayout>
 			</pages>
 		</App>
 	</Shell>

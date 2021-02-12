@@ -14,8 +14,8 @@
 			"version": "0.0.0"
 		},
 		"dataSources": {
-			"ZVGT_HPPM_DELIVERY_CREATE_SRV": {
-				"uri": "/sap/opu/odata/sap/ZVGT_HPPM_DELIVERY_CREATE_SRV/",
+			"ZVGT_UI_HPPM_DELIVERY_CREATE_SRV": {
+				"uri": "/sap/opu/odata/sap/ZVGT_UI_HPPM_DELIVERY_CREATE_SRV/",
 				"type": "OData",
 				"settings": {
 					"localUri": "localService/metadata.xml"
@@ -74,7 +74,7 @@
 					"defaultBindingMode": "TwoWay",
 					"defaultCountMode": "None"
 				},
-				"dataSource": "ZVGT_HPPM_DELIVERY_CREATE_SRV",
+				"dataSource": "ZVGT_UI_HPPM_DELIVERY_CREATE_SRV",
 				"preload": true
 			},
 			"Pallets": {
