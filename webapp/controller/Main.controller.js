@@ -72,7 +72,7 @@ sap.ui.define([
 		onFetchVariant: function () {
 			var oSaveData = {};
 			aSaveProperties.forEach(function (property) {
-				if (this._getDeliveryProperty(property)) {
+				if (this._getDeliveryProperty(property) && aSaveProperties.indexOf(property) !== -1) {
 					oSaveData[property] = this._getDeliveryProperty(property);
 				}
 			}, this);
