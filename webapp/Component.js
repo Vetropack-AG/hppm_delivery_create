@@ -1,8 +1,9 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"zvgt/hppm/delivery_create/model/models",
-	"sap/ui/Device"
-], function (UIComponent, models, Device) {
+	"sap/ui/Device",
+	"sap/ui/fl/FakeLrepConnectorLocalStorage"
+], function (UIComponent, models, Device, FakeLrepConnectorLocalStorage) {
 	"use strict";
 
 	/**
@@ -46,6 +47,19 @@ sap.ui.define([
 			this.getRouter().initialize();
 			this.setModel(models.createDeviceModel(), "device");
 			this._registerMessageManager();
+
+			if (this.isInTestEnvironment()) {
+				this.enableFakeLrep();
+			}
+		},
+
+		destroy: function () {
+			// call the base component's destroy function
+			UIComponent.prototype.destroy.apply(this, arguments);
+
+			if (this.isInTestEnvironment()) {
+				FakeLrepConnectorLocalStorage.disableFakeConnector();
+			}
 		},
 
 		/* =========================================================== */
@@ -93,6 +107,26 @@ sap.ui.define([
 				}
 			}
 			return "sapUiSizeCompact";
+		},
+
+		enableFakeLrep: function () {
+			FakeLrepConnectorLocalStorage.enableFakeConnector(
+				null,
+				this.getAppId(),
+				this.getVersion()
+			);
+		},
+
+		getAppId: function () {
+			return this.getManifestEntry("/sap.app").id;
+		},
+
+		getVersion: function () {
+			return this.getManifestEntry("/sap.app/applicationVersion").version;
+		},
+
+		isInTestEnvironment: function () {
+			return window.location.hostname.indexOf("webidetesting") !== -1;
 		}
 
 	});

@@ -5,6 +5,26 @@ sap.ui.define([
 ], function (BaseController, Log, formatter) {
 	"use strict";
 
+	var aSaveProperties = [
+		"Comment",
+		"CustomerDelivery",
+		"DeliveryDateFrom",
+		"DeliveryDateUntil",
+		"DeliveryKey",
+		"Description",
+		"Incoterm",
+		"Owner",
+		"OwnerText",
+		"PickUpDateFrom",
+		"PickUpDateUntil",
+		"ShipToParty",
+		"ShipToPartyText",
+		"SoldToParty",
+		"SoldToPartyText",
+		"TruckNumber",
+		"Pallets"
+	];
+
 	/**
 	 * @constructor zvgt.hppm.delivery_create.controller.Main
 	 * 
@@ -48,6 +68,29 @@ sap.ui.define([
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
+
+		onFetchVariant: function () {
+			var oSaveData = {};
+			aSaveProperties.forEach(function (property) {
+				if (this._getDeliveryProperty(property)) {
+					oSaveData[property] = this._getDeliveryProperty(property);
+				}
+			}, this);
+
+			if (this._getPallets().length > 0) {
+				oSaveData.Pallets = this._getPallets();
+			}
+			return oSaveData;
+		},
+
+		onApplyVariant: function (oEvent) {
+			var oVariantData = oEvent.getParameter("variantData");
+			this.getView().byId("incotermGroup").setSelectedIndex(-1);
+			this.getView().getModel().metadataLoaded().then(function () {
+				this._bindView();
+				this._applyVariantData(oVariantData);
+			}.bind(this));
+		},
 
 		/**
 		 * Eventhandler when the save button is pressed.
@@ -111,6 +154,7 @@ sap.ui.define([
 			oDialog.close();
 			var iResult = oDialog.getContent()[0].getResult();
 			this._oCalculatorResultContext.getModel().setProperty(this._oCalculatorResultContext.getPath() + "/Quantity", iResult.toString());
+			this.setVariantDirty();
 		},
 
 		onLoadAtCustomerValueHelpRequest: function () {
@@ -159,6 +203,7 @@ sap.ui.define([
 			var sDescription = this.getBindingContextProperty(oContext, "Description");
 			this._setDeliveryProperty("Owner", sKey);
 			this._setDeliveryProperty("OwnerText", sDescription);
+			this.setVariantDirty();
 		},
 
 		onOwnerValueHelpSearch: function (oEvent) {
@@ -178,23 +223,32 @@ sap.ui.define([
 			var sDescription = this.getBindingContextProperty(oContext, "Description");
 			this._setDeliveryProperty(sProperty, sKey);
 			this._setDeliveryProperty(sProperty + "Text", sDescription);
+			this.setVariantDirty();
 		},
 
 		onLoadAtCustomerChange: function (oEvent) {
 			this._handleCustomerChange(oEvent, "SoldToParty");
+			this.setVariantDirty();
+		},
+
+		setVariantDirty: function () {
+			this.getView().byId("variantManagement").setModified(true);
 		},
 
 		onUnloadAtCustomerChange: function (oEvent) {
 			this._handleCustomerChange(oEvent, "ShipToParty");
+			this.setVariantDirty();
 		},
 
 		onOwnerChange: function (oEvent) {
 			this._handleOwnerChange(oEvent);
+			this.setVariantDirty();
 		},
 
 		onTransportBySelect: function (oEvent) {
 			var sIncoterm = oEvent.getParameter("selectedIndex") === 0 ? "FCA" : "DAP";
 			this._setDeliveryProperty("Incoterm", sIncoterm);
+			this.setVariantDirty();
 		},
 
 		onLoadCarrierTypeSelectionChange: function (oEvent) {
@@ -207,6 +261,7 @@ sap.ui.define([
 			if (sStock.length === 1) {
 				this._validateSpecialStock(oRow, sStock);
 			}
+			this.setVariantDirty();
 		},
 
 		onSpecialStockChange: function (oEvent) {
@@ -220,10 +275,12 @@ sap.ui.define([
 					this._validateSpecialStock(oRow, sStock);
 				}
 			}
+			this.setVariantDirty();
 		},
 
 		onAddPalletPress: function () {
 			this._addPallet({});
+			this.setVariantDirty();
 		},
 
 		onPalletDelete: function (oEvent) {
@@ -231,15 +288,36 @@ sap.ui.define([
 			var oContext = oItem.getBindingContext("Pallets");
 			var sItemKey = oContext.getProperty("ItemKey");
 			this._removePallet(sItemKey);
+			this.setVariantDirty();
 		},
 
 		onCancelPress: function () {
 			this._resetData();
+			this.setVariantDirty();
 		},
 
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
+
+		_applyVariantData: function (oVariantData) {
+			for (var property in oVariantData) {
+
+				if (oVariantData.hasOwnProperty(property)) {
+					if (property === "Incoterm") {
+						this.getView().byId("incotermGroup").setSelectedIndex(oVariantData[property] === "FCA" ? 0 : 1);
+					}
+					if (property.toUpperCase().indexOf("DATE") !== -1) {
+						oVariantData[property] = new Date(oVariantData[property]);
+					}
+					if (property === "Pallets") {
+						this._setPallets(oVariantData[property]);
+					} else {
+						this._setDeliveryProperty(property, oVariantData[property]);
+					}
+				}
+			}
+		},
 
 		_handleStandardValueHelpSearch: function (oEvent) {
 			var oFilter = [
@@ -309,7 +387,7 @@ sap.ui.define([
 			sap.ui.core.BusyIndicator.hide();
 			var sMessage = this.translateText("success.deliveryCreated", [oData.DeliveryKey]);
 			this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true);
-				//.then(this._resetData.bind(this));
+			//.then(this._resetData.bind(this));
 
 		},
 
@@ -487,21 +565,36 @@ sap.ui.define([
 		},
 
 		_setDeliveryProperty: function (sProperty, value) {
-			this._oDeliveryContext.getModel().setProperty(this._oDeliveryContext.getPath() + "/" + sProperty, value);
+			if (this._oDeliveryContext) {
+				return this._oDeliveryContext.getModel().setProperty(this._oDeliveryContext.getPath() + "/" + sProperty, value);
+			}
+			return undefined;
 		},
 
 		_getDeliveryProperty: function (sProperty) {
-			return this._oDeliveryContext.getModel().getProperty(this._oDeliveryContext.getPath() + "/" + sProperty);
+			if (this._oDeliveryContext) {
+				return this._oDeliveryContext.getModel().getProperty(this._oDeliveryContext.getPath() + "/" + sProperty);
+			}
+			return undefined;
 		},
 
 		_getDeliveryHeaderData: function () {
-			return this._oDeliveryContext.getModel().getProperty(this._oDeliveryContext.getPath() + "/");
+			if (this._oDeliveryContext) {
+				return this._oDeliveryContext.getModel().getProperty(this._oDeliveryContext.getPath() + "/");
+			}
+			return undefined;
 		},
 
 		_bindView: function () {
 			var oModel = this.getView().getModel();
+			if (this._oDeliveryContext) {
+				oModel.deleteCreatedEntry(this._oDeliveryContext);
+				this._oDeliveryContext.destroy();
+				this._oDeliveryContext = undefined;
+			}
 			this._oDeliveryContext = oModel.createEntry("/DeliveryHeadSet");
 			this.getView().setBindingContext(this._oDeliveryContext);
+
 		}
 
 	});

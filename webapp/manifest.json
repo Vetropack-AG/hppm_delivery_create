@@ -53,7 +53,10 @@
 			"libs": {
 				"sap.m": {},
 				"sap.ui.core": {},
-				"sap.ui.layout": {}
+				"sap.ui.layout": {},
+				"zvgt.hppm": {
+					"minVersion": "1.0.0"
+				}
 			}
 		},
 		"contentDensities": {

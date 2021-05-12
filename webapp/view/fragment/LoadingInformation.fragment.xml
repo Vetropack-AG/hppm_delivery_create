@@ -37,11 +37,13 @@
 				<DateTimePicker 
 					placeholder="{i18n>main.fromPlaceholer}" 
 					required="true" 
+					change="setVariantDirty"
 					fieldGroupIds="LoadingInformation"
 					value="{ path: 'PickUpDateFrom', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
 				<DateTimePicker 
 					placeholder="{i18n>main.untilPlaceholer}" 
 					required="true" 
+					change="setVariantDirty"
 					fieldGroupIds="LoadingInformation"
 					value="{ path: 'PickUpDateUntil', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
 					
@@ -49,10 +51,11 @@
 				<Input 
 					required="true" 
 					fieldGroupIds="LoadingInformation"
-					value="{CustomerDelivery}"/>
+					value="{CustomerDelivery}"
+					change="setVariantDirty" />
 				
 				<Label text="{i18n>main.transportBy}"/>
-				<RadioButtonGroup columns="2" select="onTransportBySelect" selectedIndex="-1" fieldGroupIds="LoadingInformation">
+				<RadioButtonGroup columns="2" select="onTransportBySelect" selectedIndex="-1" fieldGroupIds="LoadingInformation" id="incotermGroup">
 					<RadioButton  text="{i18n>main.transportByVetropack}" />
 					<RadioButton  text="{i18n>main.transportByCustomer}" />
 				</RadioButtonGroup>
@@ -72,11 +75,13 @@
 					placeholder="{i18n>main.fromPlaceholer}" 
 					required="true" 
 					fieldGroupIds="LoadingInformation"
+					change="setVariantDirty"
 					value="{ path: 'DeliveryDateFrom', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
 				<DateTimePicker 
 					placeholder="{i18n>main.untilPlaceholer}" 
 					required="true" 
 					fieldGroupIds="LoadingInformation"
+					change="setVariantDirty"
 					value="{ path: 'DeliveryDateUntil', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
 					
 				<Label text="{i18n>main.owner}" />
@@ -92,6 +97,7 @@
 				<Input 
 					required="true" 
 					fieldGroupIds="LoadingInformation"
+					change="setVariantDirty"
 					value="{TruckNumber}"/>
 			</f:content>
 		</f:SimpleForm>
@@ -116,7 +122,7 @@
 			class="vpUiFormRespGridNoPaddingTop">
 			<f:content>
 				<Label text="{i18n>main.comment}" />
-				<TextArea value="{Comment}"/>
+				<TextArea value="{Comment}" change="setVariantDirty"/>
 			</f:content>
 		</f:SimpleForm>
 		
