@@ -43,10 +43,10 @@
 		"flexEnabled": false,
 		"handleValidation": true,
 		"rootView": {
-			"viewName": "zvgt.hppm.delivery_create.view.Main",
+			"viewName": "zvgt.hppm.delivery_create.view.App",
 			"type": "XML",
 			"async": true,
-			"id": "Main"
+			"id": "App"
 		},
 		"dependencies": {
 			"minUI5Version": "1.60.0",
@@ -87,11 +87,9 @@
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		},
 		"routing": {
 			"config": {
@@ -101,23 +99,27 @@
 				"viewPath": "zvgt.hppm.delivery_create.view",
 				"controlAggregation": "pages",
 				"controlId": "app",
-				"clearControlAggregation": false
-			},
-			"routes": [
-				{
-					"name": "RouteMain",
-					"pattern": "RouteMain",
-					"target": [
-						"TargetMain"
-					]
+				"clearControlAggregation": false,
+				"bypassed": {
+					"target": []
 				}
-			],
+			},
+			"routes": [{
+				"name": "Main",
+				"pattern": "",
+				"titleTarget": "",
+				"greedy": false,
+				"target": ["Main"]
+			}],
 			"targets": {
-				"TargetMain": {
+				"App": {
+					"viewType": "XML",
+					"viewName": "App"
+				},
+				"Main": {
 					"viewType": "XML",
 					"transition": "slide",
 					"clearControlAggregation": false,
-					"viewId": "Main",
 					"viewName": "Main"
 				}
 			}

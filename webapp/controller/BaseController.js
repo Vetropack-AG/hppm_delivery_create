@@ -119,8 +119,15 @@ sap.ui.define([
 		},
 
 		showRequestErrorMessage: function (oError) {
-			var oResponse = JSON.parse(oError.responseText);
-			MessageBox.error(oResponse.error.message.value);
+			try {
+				var oResponse = JSON.parse(oError.responseText);
+				var sMessage = oResponse.error.message.value;
+			} catch (err) {
+				var parser = new DOMParser();
+				var xmlDoc = parser.parseFromString(oError.responseText, "text/xml");
+				sMessage = xmlDoc.getElementsByTagName("message")[0].childNodes[0].nodeValue;
+			}
+			MessageBox.error(sMessage);
 		},
 
 		closeDialogByEvent: function (oEvent) {

@@ -1,8 +1,11 @@
 sap.ui.define([
 	"zvgt/hppm/delivery_create/controller/BaseController",
 	"sap/base/Log",
-	"zvgt/hppm/delivery_create/model/formatter"
-], function (BaseController, Log, formatter) {
+	"zvgt/hppm/delivery_create/model/formatter",
+	"sap/ushell/services/URLParsing",
+	"sap/ui/core/routing/HashChanger",
+	"zvgt/hppm/library"
+], function (BaseController, Log, formatter, URLParsing, HashChanger, hppm) {
 	"use strict";
 
 	var aSaveProperties = [
@@ -60,14 +63,19 @@ sap.ui.define([
 		 * @method
 		 */
 		onInit: function () {
+			this.getOwnerComponent().getRouter().getRoute("Main").attachPatternMatched(this.onPatternMatched, this);
 			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
-			this.getView().getModel().metadataLoaded().then(this._bindView.bind(this));
+			this.getOwnerComponent().getModel().metadataLoaded().then(this._bindView.bind(this));
 			this._addPallet({}); // add empty pallet
 		},
 
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
+
+		onPatternMatched: function () {
+			this._setDeliveryType();
+		},
 
 		onFetchVariant: function () {
 			var oSaveData = {};
@@ -85,8 +93,9 @@ sap.ui.define([
 
 		onApplyVariant: function (oEvent) {
 			var oVariantData = oEvent.getParameter("variantData");
+			delete oVariantData.executeOnSelection;
 			this.getView().byId("incotermGroup").setSelectedIndex(-1);
-			this.getView().getModel().metadataLoaded().then(function () {
+			this.getOwnerComponent().getModel().metadataLoaded().then(function () {
 				this._bindView();
 				this._applyVariantData(oVariantData);
 			}.bind(this));
@@ -300,6 +309,16 @@ sap.ui.define([
 		/* private methods                                             */
 		/* =========================================================== */
 
+		_setDeliveryType: function () {
+			this._sDeliveryType = this._isOutboundDelivery() ? hppm.DELIVERY_TYPE.EXTERNAL : hppm.DELIVERY_TYPE.INTERNAL;
+		},
+
+		_isOutboundDelivery: function () {
+			var sHash = new HashChanger().getHash();
+			var oShellHash = new URLParsing().parseShellHash(sHash);
+			return oShellHash.semanticObject === "OutboundDelivery";
+		},
+
 		_applyVariantData: function (oVariantData) {
 			for (var property in oVariantData) {
 
@@ -336,7 +355,7 @@ sap.ui.define([
 		},
 
 		_resetData: function () {
-			this.getView().getModel().resetChanges();
+			this.getOwnerComponent().getModel().resetChanges();
 			this._resetPallets();
 			this._resetFiles();
 		},
@@ -449,20 +468,20 @@ sap.ui.define([
 		},
 
 		_setPallets: function (aPallets) {
-			this.getView().getModel("Pallets").setProperty("/", aPallets);
+			this.getOwnerComponent().getModel("Pallets").setProperty("/", aPallets);
 		},
 
 		_getPallets: function () {
-			return this.getView().getModel("Pallets").getProperty("/");
+			return this.getOwnerComponent().getModel("Pallets").getProperty("/");
 		},
 
 		_addPallet: function (oPallet) {
-			var aPallets = this.getView().getModel("Pallets").getProperty("/");
+			var aPallets = this.getOwnerComponent().getModel("Pallets").getProperty("/");
 			if (!aPallets || !aPallets.length) {
 				aPallets = [];
 			}
 			aPallets.push(oPallet);
-			this.getView().getModel("Pallets").setProperty("/", aPallets);
+			this.getOwnerComponent().getModel("Pallets").setProperty("/", aPallets);
 		},
 
 		_openCalculator: function (sMaterialGroup) {
@@ -541,7 +560,7 @@ sap.ui.define([
 		},
 
 		_getValueHelpEntity: function (sKey, sEntitySet) {
-			var oUtilsModel = this.getView().getModel();
+			var oUtilsModel = this.getOwnerComponent().getModel();
 			var sPath = oUtilsModel.createKey("/" + sEntitySet, {
 				Key: sKey
 			});
@@ -580,13 +599,15 @@ sap.ui.define([
 
 		_getDeliveryHeaderData: function () {
 			if (this._oDeliveryContext) {
-				return this._oDeliveryContext.getModel().getProperty(this._oDeliveryContext.getPath() + "/");
+				var oData = this._oDeliveryContext.getModel().getProperty(this._oDeliveryContext.getPath() + "/");
+				oData.DeliveryType = this._sDeliveryType;
+				return oData;
 			}
 			return undefined;
 		},
 
 		_bindView: function () {
-			var oModel = this.getView().getModel();
+			var oModel = this.getOwnerComponent().getModel();
 			if (this._oDeliveryContext) {
 				oModel.deleteCreatedEntry(this._oDeliveryContext);
 				this._oDeliveryContext.destroy();

@@ -1,6 +1,6 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" >
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:hppm="zvgt.hppm.controls">
 	<Dialog title="{i18n>palletsCalculatorDialog.title}" contentWidth="{= ${device>/system/desktop} ? 'auto' : '95%' }">
-		<!--<hppm:PalletsCalculator/>   xmlns:hppm="zvgt.hppm.controls"-->
+		<hppm:PalletsCalculator/>   
 		<beginButton>
 			<Button text="{i18n>general.ok}" type="Emphasized" press="onCalculatorOkPress"/>
 		</beginButton>
