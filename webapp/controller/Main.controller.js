@@ -190,16 +190,6 @@ sap.ui.define([
 			}));
 		},
 
-		_getUnloadAtCustomerFilter: function () {
-			return [
-				new sap.ui.model.Filter({
-					path: "AccountGroup",
-					operator: "EQ",
-					value1: "0120"
-				})
-			];
-		},
-
 		onOwnerValueHelpRequest: function () {
 			var oDialog = this.getFragment("PlantValueHelpDialog", this);
 			oDialog.getBinding("items").filter([]);
@@ -372,6 +362,16 @@ sap.ui.define([
 			}
 		},
 
+		_getUnloadAtCustomerFilter: function () {
+			return [
+				new sap.ui.model.Filter({
+					path: "AccountGroup",
+					operator: "EQ",
+					value1: "0120"
+				})
+			];
+		},
+
 		_validateSpecialStock: function (oRow, sStock) {
 			var oSelect = this._getSpecialStockSelectFromRow(oRow);
 			var oItem = oSelect.getSelectedItem();
@@ -488,7 +488,8 @@ sap.ui.define([
 			var sId = this._determineCalculatorFragment(sMaterialGroup);
 			if (sId) {
 				var oDialog = this.getFragment(sId, this);
-				oDialog.getContent()[0].initialize();
+				var oCalculator = oDialog.getContent()[0];
+				oCalculator.initialize();
 				oDialog.open();
 			}
 		},
@@ -615,7 +616,6 @@ sap.ui.define([
 			}
 			this._oDeliveryContext = oModel.createEntry("/DeliveryHeadSet");
 			this.getView().setBindingContext(this._oDeliveryContext);
-
 		}
 
 	});
