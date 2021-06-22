@@ -95,7 +95,6 @@
 					
 				<Label text="{i18n>main.truckNo}" />
 				<Input 
-					required="true" 
 					fieldGroupIds="LoadingInformation"
 					change="setVariantDirty"
 					value="{TruckNumber}"/>
