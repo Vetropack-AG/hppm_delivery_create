@@ -23,6 +23,7 @@
 			class="vpUiFormRespGridNoPaddingBotton">
 			<f:content>
 				<core:Title text="{i18n>main.loadAt}" />
+					
 				<Label text="{i18n>main.customer}" />
 				<Input 
 					showValueHelp="true" 
@@ -34,18 +35,18 @@
 					/>
 					
 				<Label text="{i18n>main.pickupDate}" />
-				<DateTimePicker 
+				<DatePicker 
 					placeholder="{i18n>main.fromPlaceholer}" 
 					required="true" 
 					change="setVariantDirty"
 					fieldGroupIds="LoadingInformation"
-					value="{ path: 'PickUpDateFrom', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
-				<DateTimePicker 
+					value="{ path: 'PickUpDateFrom', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
+				<DatePicker 
 					placeholder="{i18n>main.untilPlaceholer}" 
 					required="true" 
 					change="setVariantDirty"
 					fieldGroupIds="LoadingInformation"
-					value="{ path: 'PickUpDateUntil', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
+					value="{ path: 'PickUpDateUntil', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
 					
 				<Label text="{i18n>main.customerDeliveryNo}" />
 				<Input 
@@ -61,29 +62,7 @@
 				</RadioButtonGroup>
 		
 				<core:Title text="{i18n>main.unloadAt}" />
-				<Label text="{i18n>main.location}" />
-				<Input 
-					showValueHelp="true" 
-					required="true" 
-					fieldGroupIds="LoadingInformation" 
-					valueHelpRequest="onUnloadAtCustomerValueHelpRequest" 
-					change="onUnloadAtCustomerChange"
-					value="{ parts: [ {path:'ShipToParty'}, {path: 'ShipToPartyText'} ], formatter:'.formatter.descriptionAndKey'}" />
-					
-				<Label text="{i18n>main.deliveryDate}" />
-				<DateTimePicker 
-					placeholder="{i18n>main.fromPlaceholer}" 
-					required="true" 
-					fieldGroupIds="LoadingInformation"
-					change="setVariantDirty"
-					value="{ path: 'DeliveryDateFrom', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
-				<DateTimePicker 
-					placeholder="{i18n>main.untilPlaceholer}" 
-					required="true" 
-					fieldGroupIds="LoadingInformation"
-					change="setVariantDirty"
-					value="{ path: 'DeliveryDateUntil', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { style: 'short' } }"/>
-					
+				
 				<Label text="{i18n>main.owner}" />
 				<Input 
 					showValueHelp="true" 
@@ -92,6 +71,29 @@
 					valueHelpRequest="onOwnerValueHelpRequest" 
 					change="onOwnerChange"
 					value="{ parts: [ {path:'Owner'}, {path: 'OwnerText'} ], formatter:'.formatter.descriptionAndKey'}"/>
+					
+				<Label text="{i18n>main.deliveryDate}" />
+				<DatePicker
+					placeholder="{i18n>main.fromPlaceholer}" 
+					required="true" 
+					fieldGroupIds="LoadingInformation"
+					change="setVariantDirty"
+					value="{ path: 'DeliveryDateFrom', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
+				<DatePicker 
+					placeholder="{i18n>main.untilPlaceholer}" 
+					required="true" 
+					fieldGroupIds="LoadingInformation"
+					change="setVariantDirty"
+					value="{ path: 'DeliveryDateUntil', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
+					
+				<Label text="{i18n>main.location}" />
+				<Input 
+					showValueHelp="true" 
+					required="true" 
+					fieldGroupIds="LoadingInformation" 
+					valueHelpRequest="onUnloadAtCustomerValueHelpRequest" 
+					change="onUnloadAtCustomerChange"
+					value="{ parts: [ {path:'ShipToParty'}, {path: 'ShipToPartyText'} ], formatter:'.formatter.descriptionAndKey'}" />
 					
 				<Label text="{i18n>main.truckNo}" />
 				<Input 
