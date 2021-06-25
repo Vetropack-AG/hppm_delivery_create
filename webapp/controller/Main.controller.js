@@ -406,8 +406,47 @@ sap.ui.define([
 
 		_handleCreationSuccess: function (oData) {
 			sap.ui.core.BusyIndicator.hide();
-			var sMessage = this.translateText("success.deliveryCreated", [oData.DeliveryKey]);
-			this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true);
+
+			var oDialog = new sap.m.Dialog({
+				title: "{i18n>general.success}",
+				type: "Message",
+				state: "Success",
+				content: new sap.m.Text({
+					text: this.translateText("success.deliveryCreated", [oData.DeliveryKey])
+				}),
+				beginButton: new sap.m.Button({
+					type: "Emphasized",
+					text: "{i18n>general.goBack}",
+					press: function () {
+						oDialog.close();
+						this.goBack();
+					}.bind(this)
+				}),
+				endButton: new sap.m.Button({
+					text: "{i18n>general.close}",
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function () {
+					oDialog.destroy();
+				}
+			});
+
+			this.getView().addDependent(oDialog);
+
+			oDialog.open();
+
+			// sap.m.MessageBox.success(sMessage, {
+			// 	actions: [sBackAction, sap.m.MessageBox.Action.CLOSE],
+			// 	onClose: function (sAction) {
+			// 		if (sAction === sBackAction) {
+			// 			this.goBack();
+			// 		}
+			// 	}.bind(this)
+			// });
+
+			// this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true);
 			//.then(this._resetData.bind(this));
 
 		},

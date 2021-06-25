@@ -31,7 +31,11 @@
 		<uxap:footer>
 			<Bar>
 				<contentLeft>
-					<Button icon="sap-icon://alert" text="{= ${message>/}.length }" press="onMessagePopoverPress"/>
+					<Button
+						icon="{ path: 'message>/', formatter: '.formatter.messageButtonIconFormatter' }"
+						type="{ path: 'message>/', formatter: '.formatter.messageButtonTypeFormatter' }"
+						text="{= ${message>/}.length}"
+						press="onMessagePopoverPress"/>
 				</contentLeft>
 				<contentRight>
 					<Button text="{i18n>general.save}" type="Accept" press="onSavePress"/>

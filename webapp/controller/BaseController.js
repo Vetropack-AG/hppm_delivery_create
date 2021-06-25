@@ -164,6 +164,11 @@ sap.ui.define([
 			return oBundle.getText(sText, aParams);
 		},
 
+		goBack: function () {
+			window.history.go(-1); // eslint-disable-line	
+			return false;
+		},
+
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
