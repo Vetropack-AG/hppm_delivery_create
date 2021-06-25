@@ -253,14 +253,16 @@ sap.ui.define([
 		onLoadCarrierTypeSelectionChange: function (oEvent) {
 			var oRow = oEvent.getSource().getParent();
 			var oItem = oEvent.getParameter("selectedItem");
-			var oContext = oItem.getBindingContext();
-			var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
-			oEvent.getSource().setValueState("None");
+			if (oItem) {
+				var oContext = oItem.getBindingContext();
+				var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
+				oEvent.getSource().setValueState("None");
 
-			if (sStock.length === 1) {
-				this._validateSpecialStock(oRow, sStock);
+				if (sStock.length === 1) {
+					this._validateSpecialStock(oRow, sStock);
+				}
+				this.setVariantDirty();
 			}
-			this.setVariantDirty();
 		},
 
 		onSpecialStockChange: function (oEvent) {

@@ -26,10 +26,10 @@
 						id="LoadCarrierType"
 						items="{ path: '/LoadCarrierTypeValueHelpSet', templateShareable: false}" 
 						selectedKey="{Pallets>MaterialNumber}" 
-						showSecondaryValues="true" 
+						showSecondaryValues="false" 
 						filterSecondaryValues="true"
 						selectionChange="onLoadCarrierTypeSelectionChange">
-							<core:ListItem key="{Key}" text="{Description}" additionalText="{Key}" />
+							<core:ListItem key="{Key}" text="{Key} - {Description}" additionalText="{Key}" />
 					</ComboBox>
 					<Select width="100%"
 						id="SpecialStock" 
