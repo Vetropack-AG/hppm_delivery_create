@@ -223,11 +223,18 @@ sap.ui.define([
 			this._setDeliveryProperty(sProperty, sKey);
 			this._setDeliveryProperty(sProperty + "Text", sDescription);
 			this.setVariantDirty();
+
+			if (sProperty === "SoldToParty") {
+				this._setFieldsForCustomer(sKey);
+			}
 		},
 
 		onLoadAtCustomerChange: function (oEvent) {
 			this._handleCustomerChange(oEvent, "SoldToParty");
 			this.setVariantDirty();
+
+			var sValue = oEvent.getParameter("value");
+			this._setFieldsForCustomer(sValue);
 		},
 
 		setVariantDirty: function () {
@@ -300,6 +307,30 @@ sap.ui.define([
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
+
+		_setFieldsForCustomer: function (sCustomerNumber) {
+			var oModel = this.getView().getModel();
+			var sKey = oModel.createKey("/CustomerValueHelpSet", {
+				Key: sCustomerNumber
+			});
+			oModel.read(sKey, {
+				success: function (oData) {
+					if (oData.Incoterm && oData.Incoterm !== "") {
+						this.getView().byId("incotermGroup").setSelectedIndex(oData.Incoterm === "FCA" ? 0 : 1);
+					}
+					if (oData.Location && oData.Location !== "") {
+						this.getView().byId("LocationInput").fireChange({
+							value: oData.Location
+						});
+					}
+					if (oData.Owner && oData.Owner !== "") {
+						this.getView().byId("OwnerInput").fireChange({
+							value: oData.Owner
+						});
+					}
+				}.bind(this)
+			});
+		},
 
 		_setDeliveryType: function () {
 			this._sDeliveryType = this._isOutboundDelivery() ? hppm.DELIVERY_TYPE.EXTERNAL : hppm.DELIVERY_TYPE.INTERNAL;

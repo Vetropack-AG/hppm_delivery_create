@@ -65,6 +65,7 @@
 				
 				<Label text="{i18n>main.owner}" />
 				<Input 
+					id="OwnerInput"
 					showValueHelp="true" 
 					required="true" 
 					fieldGroupIds="LoadingInformation"
@@ -88,6 +89,7 @@
 					
 				<Label text="{i18n>main.location}" />
 				<Input 
+					id="LocationInput"
 					showValueHelp="true" 
 					required="true" 
 					fieldGroupIds="LoadingInformation" 
