@@ -265,11 +265,22 @@ sap.ui.define([
 				var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
 				oEvent.getSource().setValueState("None");
 
+				var bPrefilled = this._prefillQuantityWithStock(oRow);
+				if (!bPrefilled) {
+					this._doCheckRentStockQuantity(oRow);
+				}
 				if (sStock.length === 1) {
 					this._validateSpecialStock(oRow, sStock);
 				}
+
 				this.setVariantDirty();
 			}
+		},
+
+		onMaterialQuantityChange: function (oEvent) {
+			var oRow = oEvent.getSource().getParent().getParent();
+			this._doCheckRentStockQuantity(oRow);
+			this.setVariantDirty();
 		},
 
 		onSpecialStockChange: function (oEvent) {
@@ -307,6 +318,60 @@ sap.ui.define([
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
+
+		_doCheckRentStockQuantity: function (oRow) {
+			var oSelect = this._getSpecialStockSelectFromRow(oRow);
+			var oItem = oSelect.getSelectedItem();
+			var sStock = oSelect.getSelectedKey();
+			if (sStock === "V") {
+				this._getRentStock(oItem)
+					.then(function (sStockQuantity) {
+						this._checkRentStockQuantity(oRow, sStockQuantity);
+					}.bind(this));
+			}
+
+		},
+
+		_checkRentStockQuantity: function (oRow, sStockQuantity) {
+			var oInput = this._getQuantityInputFromRow(oRow);
+			var sQuantity = oInput.getValue();
+			if (sQuantity && sQuantity !== "" && parseFloat(sQuantity, 10) > parseFloat(sStockQuantity, 10)) {
+				oInput.setValueState("Warning");
+				oInput.setValueStateText(this.translateText("warning.notOnStock"));
+			} else {
+				oInput.setValueState("None");
+				oInput.setValueStateText();
+			}
+		},
+
+		_prefillQuantityWithStock: function (oRow, sStockQuantity) {
+			if (parseFloat(sStockQuantity, 10) > 0) {
+				var oInput = this._getQuantityInputFromRow(oRow);
+				var oContext = oInput.getBindingContext("Pallets");
+				this.setBindingContextProperty(oContext, "Quantity", sStockQuantity);
+				return true;
+			}
+			return false;
+		},
+
+		_getRentStock: function (oItem) {
+			return new Promise(function (resolve, reject) {
+				var oModel = this.getView().getModel();
+				var oContext = oItem.getBindingContext();
+				var sKey = oModel.createKey("/MaterialStockSet", {
+					Customer: this._getDeliveryProperty("SoldToParty"),
+					Plant: this._getDeliveryProperty("Owner"),
+					Material: this.getBindingContextProperty(oContext, "Key"),
+					SpecialStock: "V"
+				});
+				oModel.read(sKey, {
+					success: function (oData) {
+						resolve(oData.Quantity);
+					},
+					error: reject
+				});
+			}.bind(this));
+		},
 
 		_setFieldsForCustomer: function (sCustomerNumber) {
 			var oModel = this.getView().getModel();
@@ -465,21 +530,7 @@ sap.ui.define([
 			});
 
 			this.getView().addDependent(oDialog);
-
 			oDialog.open();
-
-			// sap.m.MessageBox.success(sMessage, {
-			// 	actions: [sBackAction, sap.m.MessageBox.Action.CLOSE],
-			// 	onClose: function (sAction) {
-			// 		if (sAction === sBackAction) {
-			// 			this.goBack();
-			// 		}
-			// 	}.bind(this)
-			// });
-
-			// this.showSuccessMessage(sMessage, /* bPreventAddToMessageContainer => */ true);
-			//.then(this._resetData.bind(this));
-
 		},
 
 		_handleCreationError: function (oError) {
@@ -584,6 +635,10 @@ sap.ui.define([
 
 		_getSpecialLoadCarrierTypeComboBoxFromRow: function (oRow) {
 			return this._getCellFromRow(oRow, "LoadCarrierType");
+		},
+
+		_getQuantityInputFromRow: function (oRow) {
+			return this._getCellFromRow(oRow, "Quantity").getItems()[0];
 		},
 
 		_getCellFromRow: function (oRow, sId) {

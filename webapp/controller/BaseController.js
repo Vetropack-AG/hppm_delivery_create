@@ -138,6 +138,10 @@ sap.ui.define([
 			return oContext.getModel().getProperty(oContext.getPath() + "/" + sProperty);
 		},
 
+		setBindingContextProperty: function (oContext, sProperty, value) {
+			return oContext.getModel().setProperty(oContext.getPath() + "/" + sProperty, value);
+		},
+
 		validateFieldGroup: function (oEvent) {
 			var sFieldGroupId = oEvent.getParameter("fieldGroupIds")[0];
 			var oForm = this.getView().byId("LoadingInformationSimpleForm");
