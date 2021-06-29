@@ -294,6 +294,7 @@ sap.ui.define([
 					this._validateSpecialStock(oRow, sStock);
 				}
 			}
+			this._doCheckRentStockQuantity(oRow);
 			this.setVariantDirty();
 		},
 
@@ -322,20 +323,19 @@ sap.ui.define([
 		_doCheckRentStockQuantity: function (oRow) {
 			var oSelect = this._getSpecialStockSelectFromRow(oRow);
 			var oItem = oSelect.getSelectedItem();
-			var sStock = oSelect.getSelectedKey();
-			if (sStock === hppm.STOCK_TYPE.RENT) {
-				this._getRentStock(oItem)
-					.then(function (sStockQuantity) {
-						this._checkRentStockQuantity(oRow, sStockQuantity);
-					}.bind(this));
-			}
 
+			this._getRentStock(oItem)
+				.then(function (sStockQuantity) {
+					this._checkRentStockQuantity(oRow, sStockQuantity);
+				}.bind(this));
 		},
 
 		_checkRentStockQuantity: function (oRow, sStockQuantity) {
+			var oSelect = this._getSpecialStockSelectFromRow(oRow);
+			var sStock = oSelect.getSelectedKey();
 			var oInput = this._getQuantityInputFromRow(oRow);
 			var sQuantity = oInput.getValue();
-			if (sQuantity && sQuantity !== "" && parseFloat(sQuantity, 10) > parseFloat(sStockQuantity, 10)) {
+			if (sQuantity && sQuantity !== "" && parseFloat(sQuantity, 10) > parseFloat(sStockQuantity, 10) && sStock === hppm.STOCK_TYPE.RENT) {
 				oInput.setValueState("Warning");
 				oInput.setValueStateText(this.translateText("warning.notOnStock"));
 			} else {
