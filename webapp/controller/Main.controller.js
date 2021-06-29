@@ -323,7 +323,7 @@ sap.ui.define([
 			var oSelect = this._getSpecialStockSelectFromRow(oRow);
 			var oItem = oSelect.getSelectedItem();
 			var sStock = oSelect.getSelectedKey();
-			if (sStock === "V") {
+			if (sStock === hppm.STOCK_TYPE.RENT) {
 				this._getRentStock(oItem)
 					.then(function (sStockQuantity) {
 						this._checkRentStockQuantity(oRow, sStockQuantity);
@@ -362,7 +362,7 @@ sap.ui.define([
 					Customer: this._getDeliveryProperty("SoldToParty"),
 					Plant: this._getDeliveryProperty("Owner"),
 					Material: this.getBindingContextProperty(oContext, "Key"),
-					SpecialStock: "V"
+					SpecialStock: hppm.STOCK_TYPE.RENT
 				});
 				oModel.read(sKey, {
 					success: function (oData) {
