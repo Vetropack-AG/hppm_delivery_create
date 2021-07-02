@@ -30,6 +30,12 @@ sap.ui.define([
 		/* public methods                                              */
 		/* =========================================================== */
 
+		addDaysToDate: function (oDate, iDays) {
+			var oResult = new Date(oDate);
+			oResult.setDate(oResult.getDate() + iDays);
+			return oResult;
+		},
+
 		/**
 		 * Adds a message to the message manager.
 		 * @param {object} mSettings The settings for the message.

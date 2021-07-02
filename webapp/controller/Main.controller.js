@@ -316,9 +316,32 @@ sap.ui.define([
 			this.setVariantDirty();
 		},
 
+		onDeliveryDateFromChange: function (oEvent) {
+			this._handleLoadingInfoDateChange(oEvent, "PickUpDateFrom");
+		},
+
+		onDeliveryDateUntilChange: function (oEvent) {
+			this._handleLoadingInfoDateChange(oEvent, "PickUpDateUntil");
+		},
+
+		onPickupDateFromChange: function (oEvent) {
+			this._handleLoadingInfoDateChange(oEvent, "DeliveryDateFrom");
+		},
+
+		onPickupDateUntilChange: function (oEvent) {
+			this._handleLoadingInfoDateChange(oEvent, "DeliveryDateUntil");
+		},
+
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
+
+		_handleLoadingInfoDateChange: function (oEvent, sProperty) {
+			var oValue = oEvent.getSource().getDateValue();
+			var oNewDate = this.addDaysToDate(oValue, 1);
+			this._setDeliveryProperty(sProperty, oNewDate);
+			this.setVariantDirty();
+		},
 
 		_doCheckRentStockQuantity: function (oRow) {
 			var oSelect = this._getSpecialStockSelectFromRow(oRow);

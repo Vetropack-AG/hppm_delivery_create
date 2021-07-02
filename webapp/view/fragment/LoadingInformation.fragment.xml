@@ -34,18 +34,20 @@
 					value="{ parts: [ {path:'SoldToParty'}, {path: 'SoldToPartyText'} ], formatter:'.formatter.descriptionAndKey'}"
 					/>
 					
-				<Label text="{i18n>main.pickupDate}" />
+				<Label text="{i18n>main.pickupDate}" visible="{= ${Incoterm} === 'FCA' }"/>
 				<DatePicker 
 					placeholder="{i18n>main.fromPlaceholer}" 
 					required="true" 
-					change="setVariantDirty"
+					change="onPickupDateFromChange"
 					fieldGroupIds="LoadingInformation"
+					visible="{= ${Incoterm} === 'FCA' }"
 					value="{ path: 'PickUpDateFrom', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
 				<DatePicker 
 					placeholder="{i18n>main.untilPlaceholer}" 
 					required="true" 
-					change="setVariantDirty"
+					change="onPickupDateUntilChange"
 					fieldGroupIds="LoadingInformation"
+					visible="{= ${Incoterm} === 'FCA' }"
 					value="{ path: 'PickUpDateUntil', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
 					
 				<Label text="{i18n>main.customerDeliveryNo}" />
@@ -73,18 +75,20 @@
 					change="onOwnerChange"
 					value="{ parts: [ {path:'Owner'}, {path: 'OwnerText'} ], formatter:'.formatter.descriptionAndKey'}"/>
 					
-				<Label text="{i18n>main.deliveryDate}" />
+				<Label text="{i18n>main.deliveryDate}" visible="{= ${Incoterm} === 'DAP' }"/>
 				<DatePicker
 					placeholder="{i18n>main.fromPlaceholer}" 
 					required="true" 
 					fieldGroupIds="LoadingInformation"
-					change="setVariantDirty"
+					change="onDeliveryDateFromChange"
+					visible="{= ${Incoterm} === 'DAP' }"
 					value="{ path: 'DeliveryDateFrom', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
 				<DatePicker 
 					placeholder="{i18n>main.untilPlaceholer}" 
 					required="true" 
 					fieldGroupIds="LoadingInformation"
-					change="setVariantDirty"
+					change="onDeliveryDateUntilChange"
+					visible="{= ${Incoterm} === 'DAP' }"
 					value="{ path: 'DeliveryDateUntil', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
 					
 				<Label text="{i18n>main.location}" />
