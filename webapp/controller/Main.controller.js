@@ -168,7 +168,11 @@ sap.ui.define([
 
 		onLoadAtCustomerValueHelpRequest: function () {
 			var oDialog = this.getFragment("CustomerValueHelpDialog", this);
-			oDialog.getBinding("items").filter([]);
+			if (this._isOutboundDelivery()) {
+				oDialog.getBinding("items").filter([]);
+			} else {
+				oDialog.getBinding("items").filter(this._getUnloadAtCustomerFilter());
+			}
 			oDialog.open();
 
 			oDialog.removeAllCustomData();
