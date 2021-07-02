@@ -766,6 +766,14 @@ sap.ui.define([
 			}
 			this._oDeliveryContext = oModel.createEntry("/DeliveryHeadSet");
 			this.getView().setBindingContext(this._oDeliveryContext);
+
+			var bOutbound = this._isOutboundDelivery();
+			if (!bOutbound) {
+				this._setDeliveryProperty("Incoterm", "DAP");
+				var oRadioGroup = this.getView().byId("incotermGroup");
+				oRadioGroup.setEditable(false);
+				oRadioGroup.setSelectedIndex(0);
+			}
 		}
 
 	});
