@@ -236,6 +236,9 @@ sap.ui.define([
 
 		_validateSelect: function (oControl) {
 			var sValueState = "None";
+			if (!oControl.getVisible()) {
+				return true;
+			}
 			if (!oControl.getSelectedKey() || oControl.getSelectedKey() === "") {
 				sValueState = "Error";
 			}

@@ -74,6 +74,7 @@ sap.ui.define([
 		/* =========================================================== */
 
 		onPatternMatched: function () {
+			this.getView().setModel(new sap.ui.model.json.JSONModel(), "ViewSettings");
 			this._setDeliveryType();
 		},
 
@@ -348,13 +349,15 @@ sap.ui.define([
 		},
 
 		_doCheckRentStockQuantity: function (oRow) {
-			var oSelect = this._getSpecialStockSelectFromRow(oRow);
-			var oItem = oSelect.getSelectedItem();
+			if (this._sDeliveryType === hppm.DELIVERY_TYPE.EXTERNAL) {
+				var oSelect = this._getSpecialStockSelectFromRow(oRow);
+				var oItem = oSelect.getSelectedItem();
 
-			this._getRentStock(oItem)
-				.then(function (sStockQuantity) {
-					this._checkRentStockQuantity(oRow, sStockQuantity);
-				}.bind(this));
+				this._getRentStock(oItem)
+					.then(function (sStockQuantity) {
+						this._checkRentStockQuantity(oRow, sStockQuantity);
+					}.bind(this));
+			}
 		},
 
 		_checkRentStockQuantity: function (oRow, sStockQuantity) {
@@ -426,6 +429,7 @@ sap.ui.define([
 
 		_setDeliveryType: function () {
 			this._sDeliveryType = this._isOutboundDelivery() ? hppm.DELIVERY_TYPE.EXTERNAL : hppm.DELIVERY_TYPE.INTERNAL;
+			this.getView().getModel("ViewSettings").setProperty("/DeliveryType", this._sDeliveryType);
 		},
 
 		_isOutboundDelivery: function () {

@@ -11,7 +11,7 @@
 			<Column>
 				<Text text="{i18n>main.carrierType}"/>
 			</Column>
-			<Column width="18%" minScreenWidth="Desktop" demandPopin="true">
+			<Column width="18%" minScreenWidth="Desktop" demandPopin="true" visible="{= ${ViewSettings>/DeliveryType}  !== 'ZLB' }">
 				<Text text="{i18n>main.customerPackagingStock}"/>
 			</Column>
 			<Column width="20%" minScreenWidth="Desktop" demandPopin="true">
@@ -36,6 +36,7 @@
 						change="onSpecialStockChange"
 						selectedKey="{Pallets>SpecialStock}"
 						forceSelection="false"
+						visible="{= ${ViewSettings>/DeliveryType}  !== 'ZLB' }"
 						items="{
 					        path : '/SpecialStockValueHelpSet',
 					        templateShareable: false,
