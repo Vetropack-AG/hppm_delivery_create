@@ -412,6 +412,7 @@ sap.ui.define([
 				success: function (oData) {
 					if (oData.Incoterm && oData.Incoterm !== "") {
 						this.getView().byId("incotermGroup").setSelectedIndex(oData.Incoterm === "FCA" ? 0 : 1);
+						this._setDeliveryProperty("Incoterm", "FCA");
 					}
 					if (oData.Location && oData.Location !== "") {
 						this.getView().byId("LocationInput").fireChange({
