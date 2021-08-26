@@ -385,15 +385,16 @@ sap.ui.define([
 		},
 
 		_getRentStock: function (oItem) {
+			var oContext = oItem.getBindingContext();
+			var oModel = this.getView().getModel();
+			var sKey = oModel.createKey("/MaterialStockSet", {
+				Customer: this._getDeliveryProperty("SoldToParty"),
+				Plant: this._getDeliveryProperty("Owner"),
+				Material: this.getBindingContextProperty(oContext, "Key"),
+				SpecialStock: hppm.STOCK_TYPE.RENT
+			});
+
 			return new Promise(function (resolve, reject) {
-				var oModel = this.getView().getModel();
-				var oContext = oItem.getBindingContext();
-				var sKey = oModel.createKey("/MaterialStockSet", {
-					Customer: this._getDeliveryProperty("SoldToParty"),
-					Plant: this._getDeliveryProperty("Owner"),
-					Material: this.getBindingContextProperty(oContext, "Key"),
-					SpecialStock: hppm.STOCK_TYPE.RENT
-				});
 				oModel.read(sKey, {
 					success: function (oData) {
 						resolve(oData.Quantity);
