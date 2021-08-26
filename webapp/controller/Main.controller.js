@@ -310,9 +310,9 @@ sap.ui.define([
 
 		onPalletDelete: function (oEvent) {
 			var oItem = oEvent.getParameter("listItem");
-			var oContext = oItem.getBindingContext("Pallets");
-			var sItemKey = oContext.getProperty("ItemKey");
-			this._removePallet(sItemKey);
+			// var oContext = oItem.getBindingContext("Pallets");
+			// var sItemKey = oContext.getProperty("ItemKey");
+			this._removePallet(oItem);
 			this.setVariantDirty();
 		},
 
@@ -611,11 +611,11 @@ sap.ui.define([
 			return this._validateControls(aControls);
 		},
 
-		_removePallet: function (sKey) {
+		_removePallet: function (oItem) {
 			var aPallets = this._getPallets();
-			for (var i = 0; i < aPallets.length; i++) {
-				var oPallet = aPallets[i];
-				if (oPallet.ItemKey === sKey) {
+			var aItems = this.getView().byId("Pallets").getItems();
+			for (var i = 0; i < aItems.length; i++) {
+				if(oItem.getId() === aItems[i].getId()) {
 					aPallets.splice(i, 1);
 					break;
 				}
