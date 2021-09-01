@@ -231,6 +231,7 @@ sap.ui.define([
 
 			if (sProperty === "SoldToParty") {
 				this._setFieldsForCustomer(sKey);
+				this._filterLoadCarrierTypesForCustomer(sKey);
 			}
 		},
 
@@ -240,6 +241,7 @@ sap.ui.define([
 
 			var sValue = oEvent.getParameter("value");
 			this._setFieldsForCustomer(sValue);
+			this._filterLoadCarrierTypesForCustomer(sValue);
 		},
 
 		setVariantDirty: function () {
@@ -341,6 +343,13 @@ sap.ui.define([
 		/* private methods                                             */
 		/* =========================================================== */
 
+		_filterLoadCarrierTypesForCustomer: function (sCustomer) {
+			var oTable = this.getView().byId("Pallets");
+			oTable.getItems().forEach(function (oItem) {
+				oItem.getCells()[0].getBinding("items").filter([new sap.ui.model.Filter("Customer", "EQ", sCustomer)]);
+			}, this);
+		},
+
 		_handleLoadingInfoDateChange: function (oEvent, sProperty) {
 			var oValue = oEvent.getSource().getDateValue();
 			var oNewDate = this.addDaysToDate(oValue, 1);
@@ -352,11 +361,12 @@ sap.ui.define([
 			if (this._sDeliveryType === hppm.DELIVERY_TYPE.EXTERNAL) {
 				var oSelect = this._getSpecialStockSelectFromRow(oRow);
 				var oItem = oSelect.getSelectedItem();
-
-				this._getRentStock(oItem)
-					.then(function (sStockQuantity) {
-						this._checkRentStockQuantity(oRow, sStockQuantity);
-					}.bind(this));
+				if (oItem) {
+					this._getRentStock(oItem)
+						.then(function (sStockQuantity) {
+							this._checkRentStockQuantity(oRow, sStockQuantity);
+						}.bind(this));
+				}
 			}
 		},
 
@@ -515,6 +525,8 @@ sap.ui.define([
 					oSelect.setValueStateText(this.translateText("warning.stockTypeNotMatching"));
 					return;
 				}
+			} else {
+				this.setBindingContextProperty(oRow.getBindingContext("Pallets"), "SpecialStock", sStock);
 			}
 			oSelect.setValueState("None");
 			oSelect.setValueStateText("");
@@ -615,7 +627,7 @@ sap.ui.define([
 			var aPallets = this._getPallets();
 			var aItems = this.getView().byId("Pallets").getItems();
 			for (var i = 0; i < aItems.length; i++) {
-				if(oItem.getId() === aItems[i].getId()) {
+				if (oItem.getId() === aItems[i].getId()) {
 					aPallets.splice(i, 1);
 					break;
 				}
