@@ -349,10 +349,12 @@ sap.ui.define([
 		/* =========================================================== */
 
 		_filterLoadCarrierTypesForCustomer: function (sCustomer) {
-			var oTable = this.getView().byId("Pallets");
-			oTable.getItems().forEach(function (oItem) {
-				oItem.getCells()[0].getBinding("items").filter([new sap.ui.model.Filter("Customer", "EQ", sCustomer)]);
-			}, this);
+			if (this._isOutboundDelivery()) {
+				var oTable = this.getView().byId("Pallets");
+				oTable.getItems().forEach(function (oItem) {
+					oItem.getCells()[0].getBinding("items").filter([new sap.ui.model.Filter("Customer", "EQ", sCustomer)]);
+				}, this);
+			}
 		},
 
 		_handleLoadingInfoDateChange: function (oEvent, sProperty) {
