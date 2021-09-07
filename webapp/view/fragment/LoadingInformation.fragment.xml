@@ -52,7 +52,7 @@
 					
 				<Label text="{i18n>main.customerDeliveryNo}" />
 				<Input 
-					required="true" 
+					required="false" 
 					fieldGroupIds="LoadingInformation"
 					value="{CustomerDelivery}"
 					change="setVariantDirty" />
