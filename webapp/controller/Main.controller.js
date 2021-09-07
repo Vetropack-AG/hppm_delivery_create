@@ -263,7 +263,7 @@ sap.ui.define([
 		},
 
 		onTransportBySelect: function (oEvent) {
-			var sIncoterm = oEvent.getParameter("selectedIndex") === 0 ? "FCA" : "DAP";
+			var sIncoterm = oEvent.getParameter("selectedIndex") === 0 ? "DAP" : "FCA";
 			this._setDeliveryProperty("Incoterm", sIncoterm);
 			this.setVariantDirty();
 		},
@@ -427,8 +427,8 @@ sap.ui.define([
 			oModel.read(sKey, {
 				success: function (oData) {
 					if (oData.Incoterm && oData.Incoterm !== "") {
-						this.getView().byId("incotermGroup").setSelectedIndex(oData.Incoterm === "FCA" ? 0 : 1);
-						this._setDeliveryProperty("Incoterm", "FCA");
+						this.getView().byId("incotermGroup").setSelectedIndex(oData.Incoterm === "DAP" ? 0 : 1);
+						this._setDeliveryProperty("Incoterm", "DAP");
 					}
 					if (oData.Location && oData.Location !== "") {
 						this.getView().byId("LocationInput").fireChange({
@@ -460,7 +460,7 @@ sap.ui.define([
 
 				if (oVariantData.hasOwnProperty(property)) {
 					if (property === "Incoterm") {
-						this.getView().byId("incotermGroup").setSelectedIndex(oVariantData[property] === "FCA" ? 0 : 1);
+						this.getView().byId("incotermGroup").setSelectedIndex(oVariantData[property] === "DAP" ? 0 : 1);
 					}
 					if (property.toUpperCase().indexOf("DATE") !== -1) {
 						oVariantData[property] = new Date(oVariantData[property]);
