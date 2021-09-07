@@ -51,6 +51,7 @@ sap.ui.define([
 			if (this.isInTestEnvironment()) {
 				this.enableFakeLrep();
 			}
+			this._addShellHeaderHomeButton();
 		},
 
 		destroy: function () {
@@ -127,6 +128,54 @@ sap.ui.define([
 
 		isInTestEnvironment: function () {
 			return window.location.hostname.indexOf("webidetesting") !== -1;
+		},
+
+		_addShellHeaderHomeButton: function () {
+			var rendererPromise = this._getShellRenderer();
+			rendererPromise.then(function (oRenderer) {
+				oRenderer.addHeaderItem("sap.ushell.ui.shell.ShellHeadItem", {
+					icon: "sap-icon://home",
+					press: this._navHome
+				}, true, true);
+			}.bind(this));
+		},
+
+		_navHome: function () {
+			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+			oCrossAppNavigator.toExternal({ // eslint-disable-line
+				target: {
+					semanticObject: "#"
+				}
+			});
+		},
+
+		_getShellRenderer: function () {
+			var that = this,
+				oDeferred = new jQuery.Deferred(),
+				oRenderer;
+
+			that._oShellContainer = jQuery.sap.getObject("sap.ushell.Container");
+			if (!that._oShellContainer) {
+				oDeferred.reject(
+					"Illegal state: shell container not available; this component must be executed in a unified shell runtime context.");
+			} else {
+				oRenderer = that._oShellContainer.getRenderer();
+				if (oRenderer) {
+					oDeferred.resolve(oRenderer);
+				} else {
+					// renderer not initialized yet, listen to rendererCreated event
+					that._onRendererCreated = function (oEvent) {
+						oRenderer = oEvent.getParameter("renderer");
+						if (oRenderer) {
+							oDeferred.resolve(oRenderer);
+						} else {
+							oDeferred.reject("Illegal state: shell renderer not available after recieving 'rendererLoaded' event.");
+						}
+					};
+					that._oShellContainer.attachRendererCreatedEvent(that._onRendererCreated);
+				}
+			}
+			return oDeferred.promise();
 		}
 
 	});

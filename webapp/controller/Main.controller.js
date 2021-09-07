@@ -312,6 +312,8 @@ sap.ui.define([
 		onAddPalletPress: function () {
 			this._addPallet({});
 			this.setVariantDirty();
+			var sCustomer = this._getDeliveryProperty("SoldToParty");
+			this._filterLoadCarrierTypesForCustomer(sCustomer);
 		},
 
 		onPalletDelete: function (oEvent) {
