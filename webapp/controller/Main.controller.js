@@ -215,7 +215,7 @@ sap.ui.define([
 		},
 
 		onCustomerValueHelpSearch: function (oEvent) {
-			this._handleStandardValueHelpSearch(oEvent);
+			this._handleStandardValueHelpSearch(oEvent, true);
 		},
 
 		onCustomerValueHelpConfirm: function (oEvent) {
@@ -472,12 +472,12 @@ sap.ui.define([
 			}
 		},
 
-		_handleStandardValueHelpSearch: function (oEvent) {
+		_handleStandardValueHelpSearch: function (oEvent, bToUpperCase) {
 			var oFilter = [
 				new sap.ui.model.Filter({
 					path: "Description",
 					operator: "Contains",
-					value1: oEvent.getParameter("value")
+					value1: bToUpperCase ? oEvent.getParameter("value").toUpperCase() : oEvent.getParameter("value")
 				}),
 				new sap.ui.model.Filter({
 					path: "Key",
