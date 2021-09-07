@@ -245,7 +245,11 @@ sap.ui.define([
 		},
 
 		setVariantDirty: function () {
-			this.getView().byId("variantManagement").setModified(true);
+			this.getVariantManagement().setModified(true);
+		},
+
+		getVariantManagement: function () {
+			return this.getView().byId("variantManagement");
 		},
 
 		onUnloadAtCustomerChange: function (oEvent) {
@@ -319,8 +323,7 @@ sap.ui.define([
 		},
 
 		onCancelPress: function () {
-			this._resetData();
-			this.setVariantDirty();
+			this.getVariantManagement().applyInitialVariant();
 		},
 
 		onDeliveryDateFromChange: function (oEvent) {
@@ -566,8 +569,9 @@ sap.ui.define([
 				endButton: new sap.m.Button({
 					text: "{i18n>general.close}",
 					press: function () {
+						this.getVariantManagement().applyInitialVariant();
 						oDialog.close();
-					}
+					}.bind(this)
 				}),
 				afterClose: function () {
 					oDialog.destroy();
