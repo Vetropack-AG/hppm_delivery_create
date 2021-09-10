@@ -430,7 +430,7 @@ sap.ui.define([
 				success: function (oData) {
 					if (oData.Incoterm && oData.Incoterm !== "") {
 						this.getView().byId("incotermGroup").setSelectedIndex(oData.Incoterm === "DAP" ? 0 : 1);
-						this._setDeliveryProperty("Incoterm", "DAP");
+						this._setDeliveryProperty("Incoterm", oData.Incoterm);
 					}
 					if (oData.Location && oData.Location !== "") {
 						this.getView().byId("LocationInput").fireChange({

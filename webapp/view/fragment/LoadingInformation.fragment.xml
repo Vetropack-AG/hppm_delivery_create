@@ -34,20 +34,20 @@
 					value="{ parts: [ {path:'SoldToParty'}, {path: 'SoldToPartyText'} ], formatter:'.formatter.descriptionAndKey'}"
 					/>
 					
-				<Label text="{i18n>main.pickupDate}" visible="{= ${Incoterm} === 'FCA' }"/>
+				<Label text="{i18n>main.pickupDate}" visible="{= ${Incoterm} === 'DAP' }"/>
 				<DatePicker 
 					placeholder="{i18n>main.fromPlaceholer}" 
 					required="true" 
 					change="onPickupDateFromChange"
 					fieldGroupIds="LoadingInformation"
-					visible="{= ${Incoterm} === 'FCA' }"
+					visible="{= ${Incoterm} === 'DAP' }"
 					value="{ path: 'PickUpDateFrom', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
 				<DatePicker 
 					placeholder="{i18n>main.untilPlaceholer}" 
 					required="true" 
 					change="onPickupDateUntilChange"
 					fieldGroupIds="LoadingInformation"
-					visible="{= ${Incoterm} === 'FCA' }"
+					visible="{= ${Incoterm} === 'DAP' }"
 					value="{ path: 'PickUpDateUntil', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
 					
 				<Label text="{i18n>main.customerDeliveryNo}" />
@@ -81,14 +81,14 @@
 					required="true" 
 					fieldGroupIds="LoadingInformation"
 					change="onDeliveryDateFromChange"
-					visible="{= ${Incoterm} === 'DAP' }"
+					visible="{= ${Incoterm} !== 'DAP' }"
 					value="{ path: 'DeliveryDateFrom', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
 				<DatePicker 
 					placeholder="{i18n>main.untilPlaceholer}" 
 					required="true" 
 					fieldGroupIds="LoadingInformation"
 					change="onDeliveryDateUntilChange"
-					visible="{= ${Incoterm} === 'DAP' }"
+					visible="{= ${Incoterm} !== 'DAP' }"
 					value="{ path: 'DeliveryDateUntil', type: 'sap.ui.model.odata.type.DateTime', constraints: { displayFormat: 'Date' } }"/>
 					
 				<Label text="{i18n>main.location}" />
