@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:hppm="zvgt.hppm.controls">
-	<Dialog title="{i18n>layersCalculatorDialog.title}" contentWidth="{= ${device>/system/desktop} ? 'auto' : '95%' }">
+	<Dialog title="{i18n>layersCalculatorDialog.title}" contentWidth="{= ${device>/system/desktop} ? '30%' : '95%' }">
 		<hppm:LayersCalculator
 			calculationConstant="{ path:'ViewSettings>/LayerHeight', type:'sap.ui.model.odata.type.String' }"/>
 		<beginButton>
