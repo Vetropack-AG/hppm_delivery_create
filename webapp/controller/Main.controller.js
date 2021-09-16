@@ -151,7 +151,8 @@ sap.ui.define([
 			if (oSelectedItem) {
 				var oContext = oSelectedItem.getBindingContext();
 				var sMaterialGroup = this.getBindingContextProperty(oContext, "MaterialGroup");
-				this._openCalculator(sMaterialGroup);
+				var sMaterial = this.getBindingContextProperty(oContext, "Key");
+				this._openCalculator(sMaterialGroup, sMaterial);
 				this._oCalculatorResultContext = oRow.getBindingContext("Pallets");
 			} else {
 				Log.warning("Could not open calculator because no material was selected");
@@ -660,14 +661,42 @@ sap.ui.define([
 			this.getOwnerComponent().getModel("Pallets").setProperty("/", aPallets);
 		},
 
-		_openCalculator: function (sMaterialGroup) {
+		_openCalculator: function (sMaterialGroup, sMaterial) {
 			var sId = this._determineCalculatorFragment(sMaterialGroup);
 			if (sId) {
+				if (sMaterialGroup === hppm.MATERIAL_GROUP.LAYER) {
+					this._prefillMaterialHeight(sMaterial);
+				}
+
 				var oDialog = this.getFragment(sId, this);
 				var oCalculator = oDialog.getContent()[0];
 				oCalculator.initialize();
 				oDialog.open();
 			}
+		},
+
+		_prefillMaterialHeight: function (sMaterial) {
+			this._getMaterialHeight(sMaterial)
+				.then(this._setMaterialHeight.bind(this));
+		},
+
+		_getMaterialHeight: function (sMaterial) {
+			var oModel = this.getOwnerComponent().getModel();
+			var sPath = oModel.createKey("/MaterialSet", {
+				MaterialNumber: sMaterial
+			});
+			return new Promise(function (resolve, reject) {
+				oModel.read(sPath, {
+					success: function (oData) {
+						resolve(oData.Height);
+					},
+					error: reject
+				});
+			});
+		},
+		
+		_setMaterialHeight: function(sValue) {
+			this.getView().getModel("ViewSettings").setProperty("/LayerHeight", sValue);	
 		},
 
 		_determineCalculatorFragment: function (sMaterialGroup) {
