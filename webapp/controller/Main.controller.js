@@ -367,7 +367,7 @@ sap.ui.define([
 
 		_doCheckRentStockQuantity: function (oRow) {
 			if (this._sDeliveryType === hppm.DELIVERY_TYPE.EXTERNAL) {
-				var oSelect = this._getSpecialStockSelectFromRow(oRow);
+				var oSelect = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
 				var oItem = oSelect.getSelectedItem();
 				if (oItem) {
 					this._getRentStock(oItem)
@@ -694,9 +694,9 @@ sap.ui.define([
 				});
 			});
 		},
-		
-		_setMaterialHeight: function(sValue) {
-			this.getView().getModel("ViewSettings").setProperty("/LayerHeight", sValue);	
+
+		_setMaterialHeight: function (sValue) {
+			this.getView().getModel("ViewSettings").setProperty("/LayerHeight", sValue);
 		},
 
 		_determineCalculatorFragment: function (sMaterialGroup) {
