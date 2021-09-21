@@ -74,7 +74,9 @@ sap.ui.define([
 		/* =========================================================== */
 
 		onPatternMatched: function () {
-			this.getView().setModel(new sap.ui.model.json.JSONModel(), "ViewSettings");
+			this.getView().setModel(new sap.ui.model.json.JSONModel({
+				"FilterLoadCarrierTypes": true
+			}), "ViewSettings");
 			this._setDeliveryType();
 		},
 
@@ -345,17 +347,28 @@ sap.ui.define([
 			this._handleLoadingInfoDateChange(oEvent, "DeliveryDateUntil");
 		},
 
+		onPalletFiltersPress: function (oEvent) {
+			var bPressed = oEvent.getParameter("pressed");
+			var aFilters = bPressed ? [new sap.ui.model.Filter("Customer", "EQ", this._getDeliveryProperty("SoldToParty"))] : [];
+			this._filterLoadCarrierTypes(aFilters);
+		},
+
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
 
 		_filterLoadCarrierTypesForCustomer: function (sCustomer) {
-			if (this._isOutboundDelivery()) {
-				var oTable = this.getView().byId("Pallets");
-				oTable.getItems().forEach(function (oItem) {
-					oItem.getCells()[0].getBinding("items").filter([new sap.ui.model.Filter("Customer", "EQ", sCustomer)]);
-				}, this);
+			var bFilter = this.getView().getModel("ViewSettings").getProperty("/FilterLoadCarrierTypes");
+			if (this._isOutboundDelivery() && bFilter) {
+				this._filterLoadCarrierTypes([new sap.ui.model.Filter("Customer", "EQ", sCustomer)]);
 			}
+		},
+
+		_filterLoadCarrierTypes: function (aFilters) {
+			var oTable = this.getView().byId("Pallets");
+			oTable.getItems().forEach(function (oItem) {
+				oItem.getCells()[0].getBinding("items").filter(aFilters);
+			}, this);
 		},
 
 		_handleLoadingInfoDateChange: function (oEvent, sProperty) {

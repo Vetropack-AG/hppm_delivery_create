@@ -3,6 +3,9 @@
 		<headerToolbar>
 			<OverflowToolbar >
 				<Title text="{i18n>main.pallets}" level="H2"/>
+				<ToggleButton type="Transparent" pressed="{ViewSettings>/FilterLoadCarrierTypes}" icon="sap-icon://filter" 
+					press="onPalletFiltersPress" tooltip="{i18n>main.filterForCustomer}"
+					visible="{= ${ViewSettings>/DeliveryType}  !== 'ZLB' }" />
 				<ToolbarSpacer/>
 				<Button type="Transparent" tooltip="{i18n>general.add}" icon="sap-icon://add" press="onAddPalletPress"/>
 			</OverflowToolbar>
