@@ -275,17 +275,20 @@ sap.ui.define([
 			var oRow = oEvent.getSource().getParent();
 			var oItem = oEvent.getParameter("selectedItem");
 			if (oItem) {
-				var oContext = oItem.getBindingContext();
-				var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
 				oEvent.getSource().setValueState("None");
 
-				var bPrefilled = this._prefillQuantityWithStock(oRow);
-				if (!bPrefilled) {
-					this._doCheckRentStockQuantity(oRow);
-				}
-				if (sStock.length === 1) {
-					this._validateSpecialStock(oRow, sStock);
-				}
+				this._getStockType(oItem.getKey())
+					.then(function (sStock) {
+						var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
+						var oContext = oComboBox.getBindingContext("Pallets");
+						this.setBindingContextProperty(oContext, "SpecialStock", sStock);
+
+						var bPrefilled = this._prefillQuantityWithStock(oRow);
+						if (!bPrefilled) {
+							this._doCheckRentStockQuantity(oRow);
+						}
+						//	this._validateSpecialStock(oRow, sStock);
+					}.bind(this));
 
 				this.setVariantDirty();
 			}
@@ -297,20 +300,20 @@ sap.ui.define([
 			this.setVariantDirty();
 		},
 
-		onSpecialStockChange: function (oEvent) {
-			var oRow = oEvent.getSource().getParent();
-			var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
-			var oItem = oComboBox.getSelectedItem();
-			if (oItem) {
-				var oContext = oItem.getBindingContext();
-				var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
-				if (sStock.length === 1) {
-					this._validateSpecialStock(oRow, sStock);
-				}
-			}
-			this._doCheckRentStockQuantity(oRow);
-			this.setVariantDirty();
-		},
+		// onSpecialStockChange: function (oEvent) {
+		// 	var oRow = oEvent.getSource().getParent();
+		// 	var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
+		// 	var oItem = oComboBox.getSelectedItem();
+		// 	if (oItem) {
+		// 		var oContext = oItem.getBindingContext();
+		// 		var sStock = this.getBindingContextProperty(oContext, "SpecialStock");
+		// 		if (sStock.length === 1) {
+		// 			this._validateSpecialStock(oRow, sStock);
+		// 		}
+		// 	}
+		// 	this._doCheckRentStockQuantity(oRow);
+		// 	this.setVariantDirty();
+		// },
 
 		onAddPalletPress: function () {
 			this._addPallet({});
@@ -356,6 +359,28 @@ sap.ui.define([
 		/* =========================================================== */
 		/* private methods                                             */
 		/* =========================================================== */
+
+		_getStockType: function (sMaterial) {
+			return new Promise(function (resolve, reject) {
+				var oModel = this.getView().getModel();
+				var sCustomer = this._getDeliveryProperty("SoldToParty");
+				var sSalesOrg = this._getDeliveryProperty("ShipToParty");
+				if (!sCustomer || !sSalesOrg) {
+					reject();
+				}
+				oModel.callFunction("/GetStockType", {
+					urlParameters: {
+						Material: sMaterial,
+						Customer: sCustomer,
+						SalesOrganisation: sSalesOrg
+					},
+					success: function (oData) {
+						resolve(oData.SpecialStock);
+					},
+					error: reject
+				});
+			}.bind(this));
+		},
 
 		_filterLoadCarrierTypesForCustomer: function (sCustomer) {
 			var bFilter = this.getView().getModel("ViewSettings").getProperty("/FilterLoadCarrierTypes");
@@ -432,7 +457,7 @@ sap.ui.define([
 					},
 					error: reject
 				});
-			}.bind(this));
+			});
 		},
 
 		_setFieldsForCustomer: function (sCustomerNumber) {
@@ -534,24 +559,24 @@ sap.ui.define([
 			];
 		},
 
-		_validateSpecialStock: function (oRow, sStock) {
-			var oSelect = this._getSpecialStockSelectFromRow(oRow);
-			var oItem = oSelect.getSelectedItem();
-			if (oItem) {
-				var oContext = oItem.getBindingContext("Pallets");
-				var sSelectedStock = this.getBindingContextProperty(oContext, "SpecialStock");
-				Log.warning("Comparing stock types. Selected: " + sSelectedStock + " vs. MaterialStock: " + sStock);
-				if (sSelectedStock !== sStock) {
-					oSelect.setValueState("Warning");
-					oSelect.setValueStateText(this.translateText("warning.stockTypeNotMatching"));
-					return;
-				}
-			} else {
-				this.setBindingContextProperty(oRow.getBindingContext("Pallets"), "SpecialStock", sStock);
-			}
-			oSelect.setValueState("None");
-			oSelect.setValueStateText("");
-		},
+		// _validateSpecialStock: function (oRow, sStock) {
+		// 	var oSelect = this._getSpecialStockSelectFromRow(oRow);
+		// 	var oItem = oSelect.getSelectedItem();
+		// 	if (oItem) {
+		// 		var oContext = oItem.getBindingContext("Pallets");
+		// 		var sSelectedStock = this.getBindingContextProperty(oContext, "SpecialStock");
+		// 		Log.warning("Comparing stock types. Selected: " + sSelectedStock + " vs. MaterialStock: " + sStock);
+		// 		if (sSelectedStock !== sStock) {
+		// 			oSelect.setValueState("Warning");
+		// 			oSelect.setValueStateText(this.translateText("warning.stockTypeNotMatching"));
+		// 			return;
+		// 		}
+		// 	} else {
+		// 		this.setBindingContextProperty(oRow.getBindingContext("Pallets"), "SpecialStock", sStock);
+		// 	}
+		// 	oSelect.setValueState("None");
+		// 	oSelect.setValueStateText("");
+		// },
 
 		_validateInputs: function () {
 			var oForm = this.getView().byId("LoadingInformationSimpleForm");
