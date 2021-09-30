@@ -331,7 +331,7 @@ sap.ui.define([
 		},
 
 		onCancelPress: function () {
-			this.getVariantManagement().applyInitialVariant();
+			this._resetData();
 		},
 
 		onDeliveryDateFromChange: function (oEvent) {
@@ -532,8 +532,7 @@ sap.ui.define([
 		},
 
 		_resetData: function () {
-			this.getOwnerComponent().getModel().resetChanges();
-			this._resetPallets();
+			this.getVariantManagement().applyInitialVariant();
 			this._resetFiles();
 		},
 
@@ -612,7 +611,7 @@ sap.ui.define([
 				endButton: new sap.m.Button({
 					text: "{i18n>general.close}",
 					press: function () {
-						this.getVariantManagement().applyInitialVariant();
+						this._resetData();
 						oDialog.close();
 					}.bind(this)
 				}),
