@@ -364,15 +364,15 @@ sap.ui.define([
 			return new Promise(function (resolve, reject) {
 				var oModel = this.getView().getModel();
 				var sCustomer = this._getDeliveryProperty("SoldToParty");
-				var sSalesOrg = this._getDeliveryProperty("ShipToParty");
-				if (!sCustomer || !sSalesOrg) {
+				var sPlant = this._getDeliveryProperty("Owner");
+				if (!sCustomer || !sPlant) {
 					reject();
 				}
 				oModel.callFunction("/GetStockType", {
 					urlParameters: {
 						Material: sMaterial,
 						Customer: sCustomer,
-						SalesOrganisation: sSalesOrg
+						Plant: sPlant
 					},
 					success: function (oData) {
 						resolve(oData.SpecialStock);
