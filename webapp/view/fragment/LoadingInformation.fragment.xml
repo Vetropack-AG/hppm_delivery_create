@@ -75,7 +75,7 @@
 					change="onOwnerChange"
 					value="{ parts: [ {path:'Owner'}, {path: 'OwnerText'} ], formatter:'.formatter.descriptionAndKey'}"/>
 					
-				<Label text="{i18n>main.deliveryDate}" visible="{= ${Incoterm} === 'DAP' }"/>
+				<Label text="{i18n>main.deliveryDate}" visible="{= ${Incoterm} !== 'DAP' }"/>
 				<DatePicker
 					placeholder="{i18n>main.fromPlaceholer}" 
 					required="true" 
