@@ -202,6 +202,8 @@ sap.ui.define([
 				return this._validateComboBox(oControl);
 			case "sap.m.RadioButtonGroup":
 				return this._validateRadioButtonGroup(oControl);
+			case "sap.m.DatePicker":
+				return this._validateDatePicker(oControl);
 			default:
 				return true;
 			}
@@ -228,6 +230,15 @@ sap.ui.define([
 		_validateDateTimePicker: function (oControl) {
 			var sValueState = "None";
 			if (oControl.getRequired() && (!oControl.getValue() || oControl.getValue() === "")) {
+				sValueState = "Error";
+			}
+			oControl.setValueState(sValueState);
+			return sValueState === "Error" ? false : true;
+		},
+
+		_validateDatePicker: function (oControl) {
+			var sValueState = "None";
+			if (oControl.getRequired() && oControl.getVisible() && (!oControl.getValue() || oControl.getValue() === "")) {
 				sValueState = "Error";
 			}
 			oControl.setValueState(sValueState);
