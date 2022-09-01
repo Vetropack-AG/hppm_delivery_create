@@ -19,5 +19,5 @@ builder:
         app:
           name: ZVGT_DEL_CREATE
           description: "HPPM: Delivery Create"
-          package: ZVGT_HPPM_DEL_CREATE
-          transport: "123"
+          package: ZVGT_HPPM_DELIVERY_CREATE
+          transport: "D91K912362"
