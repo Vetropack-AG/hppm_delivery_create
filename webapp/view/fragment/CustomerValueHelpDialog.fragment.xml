@@ -9,7 +9,7 @@
 		<StandardListItem
 			title="{Description}"
 			description="{Key}"
-			info="{Country}"
+			info="{Country}-{PostalCode} {Street}, {City}"
 			iconDensityAware="false"
 			iconInset="false"
 			type="Active" />
