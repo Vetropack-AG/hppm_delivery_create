@@ -78,6 +78,7 @@ sap.ui.define([
                 "FilterLoadCarrierTypes": true
             }), "ViewSettings");
             this._setDeliveryType();
+            this._clearCustomerAdress();
         },
 
         onFetchVariant: function () {
@@ -101,6 +102,7 @@ sap.ui.define([
             this.getOwnerComponent().getModel().metadataLoaded().then(function () {
                 this._bindView();
                 this._applyVariantData(oVariantData);
+                this._clearCustomerAdress();
             }.bind(this));
         },
 
@@ -246,6 +248,8 @@ sap.ui.define([
             var sValue = oEvent.getParameter("value");
             this._setFieldsForCustomer(sValue);
             this._filterLoadCarrierTypesForCustomer(sValue);
+
+            this._prefillStockTypeAndCheckQuantityForAllMaterials();
         },
 
         setVariantDirty: function () {
@@ -288,7 +292,6 @@ sap.ui.define([
                         if (!bPrefilled) {
                             this._doCheckRentStockQuantity(oRow);
                         }
-                        //	this._validateSpecialStock(oRow, sStock);
                     }.bind(this));
 
                 this.setVariantDirty();
@@ -489,6 +492,8 @@ sap.ui.define([
         _setDeliveryType: function () {
             this._sDeliveryType = this._isOutboundDelivery() ? hppm.DELIVERY_TYPE.EXTERNAL : hppm.DELIVERY_TYPE.INTERNAL;
             this.getView().getModel("ViewSettings").setProperty("/DeliveryType", this._sDeliveryType);
+
+            this.getView().getModel("ViewSettings").setProperty("/DeliveryType", hppm.DELIVERY_TYPE.EXTERNAL);
         },
 
         _isOutboundDelivery: function () {
@@ -535,6 +540,7 @@ sap.ui.define([
         _resetData: function () {
             this.getVariantManagement().applyInitialVariant();
             this._resetFiles();
+            this._clearCustomerAdress();
         },
 
         _resetPallets: function () {
@@ -625,6 +631,10 @@ sap.ui.define([
             oDialog.open();
         },
 
+        _clearCustomerAdress: function() {
+            this.getView().getModel("ViewSettings").setProperty("/CustomerAddress", "");
+        },
+
         _handleCreationError: function (oError) {
             sap.ui.core.BusyIndicator.hide();
             Log.error(oError);
@@ -657,6 +667,23 @@ sap.ui.define([
                     Base64Data: oFile.content
                 };
             });
+        },
+
+        _prefillStockTypeAndCheckQuantityForAllMaterials: function() {
+            var oList = this.getView().byId("Pallets");
+            oList.getItems().forEach(function(oItem) {
+                var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oItem);
+                var sMaterial = oComboBox.getSelectedKey();
+                this._getStockType(sMaterial)
+                .then(function (sStock) {
+                    var oContext = oComboBox.getBindingContext("Pallets");
+                    this.setBindingContextProperty(oContext, "SpecialStock", sStock);
+                    var bPrefilled = this._prefillQuantityWithStock(oItem);
+                    if (!bPrefilled) {
+                        this._doCheckRentStockQuantity(oItem);
+                    }
+                }.bind(this)); 
+            }, this);
         },
 
         _validatePallets: function () {
@@ -776,6 +803,10 @@ sap.ui.define([
                         this._setDeliveryProperty(sProperty, oData.Key);
                         this._setDeliveryProperty(sProperty + "Text", oData.Description);
                         oInput.setValueState("None");
+                        if (sProperty === "SoldToParty") {
+                            var sAddress = oData.Country + "-" + oData.PostalCode + " " + oData.Street + ", " + oData.City;
+                            this.getView().getModel("ViewSettings").setProperty("/CustomerAddress", sAddress);
+                        }
                     }.bind(this))
                     .catch(function () {
                         oInput.setValueState("Error");

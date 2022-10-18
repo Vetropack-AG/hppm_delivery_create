@@ -31,9 +31,11 @@
 					fieldGroupIds="LoadingInformation" 
 					valueHelpRequest="onLoadAtCustomerValueHelpRequest" 
 					change="onLoadAtCustomerChange"
-                    description="{ViewSettings>/CustomerAddress}"
 					value="{ parts: [ {path:'SoldToParty'}, {path: 'SoldToPartyText'} ], formatter:'.formatter.descriptionAndKey'}"
 					/>
+                
+                <Label visible="{= ${ViewSettings>/CustomerAddress} !== '' }" />
+                <Text text="{ViewSettings>/CustomerAddress}" visible="{= ${ViewSettings>/CustomerAddress} !== '' }"/>
 					
 				<Label text="{i18n>main.pickupDate}" visible="{= ${Incoterm} === 'DAP' }"/>
 				<DatePicker 
