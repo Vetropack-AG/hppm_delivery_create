@@ -109,6 +109,9 @@
 					fieldGroupIds="LoadingInformation"
 					change="setVariantDirty"
 					value="{TruckNumber}"/>
+
+				<Label text="{i18n>main.soldToParty}" />
+				<Text text="{ parts: [ {path:'ViewSettings>/SoldToPartyAdditionKey'}, {path: 'ViewSettings>/SoldToPartyAdditionText'} ], formatter:'.formatter.descriptionAndKey'}"/>
 			</f:content>
 		</f:SimpleForm>
 		

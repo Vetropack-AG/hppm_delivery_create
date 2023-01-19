@@ -28,24 +28,24 @@ sap.ui.define([
         "Pallets"
     ];
 
-	/**
-	 * @constructor zvgt.hppm.delivery_create.controller.Main
-	 * 
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given
-	 * @param {object} [mSettings] initial settings for the new control
-	 * 
-	 * @classdesc
-	 * Constructor for a new <code>Main Controller</code>.
-	 * 
-	 * The controller for the main view.
-	 *
-	 * @author Herbert Kaintz
-	 * @extends zvgt.hppm.delivery_create.controller.BaseController
-	 *
-	 * @public
-	 * @alias zvgt.hppm.delivery_create.controller.Main
-	 * @class 
-	 */
+    /**
+     * @constructor zvgt.hppm.delivery_create.controller.Main
+     * 
+     * @param {string} [sId] id for the new control, generated automatically if no id is given
+     * @param {object} [mSettings] initial settings for the new control
+     * 
+     * @classdesc
+     * Constructor for a new <code>Main Controller</code>.
+     * 
+     * The controller for the main view.
+     *
+     * @author Herbert Kaintz
+     * @extends zvgt.hppm.delivery_create.controller.BaseController
+     *
+     * @public
+     * @alias zvgt.hppm.delivery_create.controller.Main
+     * @class 
+     */
 
     return BaseController.extend("zvgt.hppm.delivery_create.controller.Main", {
         formatter: formatter,
@@ -54,14 +54,14 @@ sap.ui.define([
         /* lifecycle methods                                           */
         /* =========================================================== */
 
-		/**
-		 * Called when a controller is instantiated.
-		 * Can be used to modify the control before it is displayed, to bind event handlers and do other one-time initialization.
-		 * @name zvgt.hppm.delivery_create.controller.Main#init
-		 * @override
-		 * @public
-		 * @method
-		 */
+        /**
+         * Called when a controller is instantiated.
+         * Can be used to modify the control before it is displayed, to bind event handlers and do other one-time initialization.
+         * @name zvgt.hppm.delivery_create.controller.Main#init
+         * @override
+         * @public
+         * @method
+         */
         onInit: function () {
             this.getOwnerComponent().getRouter().getRoute("Main").attachPatternMatched(this.onPatternMatched, this);
             this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
@@ -106,12 +106,12 @@ sap.ui.define([
             }.bind(this));
         },
 
-		/**
-		 * Eventhandler when the save button is pressed.
-		 * @listens sap.m.Button#press
-		 * @method
-		 * @name zvgt.hppm.delivery_create.controller.Main#onSavePress
-		 */
+        /**
+         * Eventhandler when the save button is pressed.
+         * @listens sap.m.Button#press
+         * @method
+         * @name zvgt.hppm.delivery_create.controller.Main#onSavePress
+         */
         onSavePress: function () {
             if (!this._validateInputs()) {
                 return;
@@ -126,24 +126,24 @@ sap.ui.define([
             this.showErrorMessage("Duplicate filenames are not allowed");
         },
 
-		/**
-		 * Eventhandler when the LoadingInformation form is validated.
-		 * @param {object} oEvent The event issued by the control.
-		 * @listens sap.ui.layout.form.SimpleForm#validateFieldGroup
-		 * @method
-		 * @name zvgt.hppm.delivery_create.controller.Main#onLoadingInformationValidate
-		 */
+        /**
+         * Eventhandler when the LoadingInformation form is validated.
+         * @param {object} oEvent The event issued by the control.
+         * @listens sap.ui.layout.form.SimpleForm#validateFieldGroup
+         * @method
+         * @name zvgt.hppm.delivery_create.controller.Main#onLoadingInformationValidate
+         */
         onLoadingInformationValidate: function (oEvent) {
             this._bLoadingInfoValid = this.validateFieldGroup(oEvent);
         },
 
-		/**
-		 * Eventhandler when the save message popover button is pressed.
-		 * @param {object} oEvent The event issued by the control.
-		 * @listens sap.m.Button#press
-		 * @method
-		 * @name zvgt.hppm.delivery_create.controller.Main#onSavePress
-		 */
+        /**
+         * Eventhandler when the save message popover button is pressed.
+         * @param {object} oEvent The event issued by the control.
+         * @listens sap.m.Button#press
+         * @method
+         * @name zvgt.hppm.delivery_create.controller.Main#onSavePress
+         */
         onMessagePopoverPress: function (oEvent) {
             this.getFragment("MessagePopover", this).openBy(oEvent.getSource());
         },
@@ -238,6 +238,12 @@ sap.ui.define([
                 this._filterLoadCarrierTypesForCustomer(sKey);
                 var sAddress = oEvent.getParameter("selectedItem").getInfo();
                 this.getView().getModel("ViewSettings").setProperty("/CustomerAddress", sAddress);
+
+                var sLocation = this._getDeliveryProperty("ShipToParty");
+                this._handleGetSoldToyParty(sKey, sLocation);
+            } else {
+                var sCustomer = this._getDeliveryProperty("SoldToParty");
+                this._handleGetSoldToyParty(sCustomer,  sKey);
             }
         },
 
@@ -250,6 +256,9 @@ sap.ui.define([
             this._filterLoadCarrierTypesForCustomer(sValue);
 
             this._prefillStockTypeAndCheckQuantityForAllMaterials();
+
+            var sLocation = this._getDeliveryProperty("ShipToParty");
+            this._handleGetSoldToyParty(sValue, sLocation);
         },
 
         setVariantDirty: function () {
@@ -263,6 +272,9 @@ sap.ui.define([
         onUnloadAtCustomerChange: function (oEvent) {
             this._handleCustomerChange(oEvent, "ShipToParty");
             this.setVariantDirty();
+
+            var sCustomer = this._getDeliveryProperty("SoldToParty");
+            this._handleGetSoldToyParty(sCustomer,  oEvent.getParameter("value"));
         },
 
         onOwnerChange: function (oEvent) {
@@ -363,6 +375,36 @@ sap.ui.define([
         /* =========================================================== */
         /* private methods                                             */
         /* =========================================================== */
+
+        _handleGetSoldToyParty: function (sCustomer, sLocation) {
+            this._getSoldToParty(sCustomer, sLocation)
+                .then(function (oResponse) {
+                    this.getView().getModel("ViewSettings").setProperty("/SoldToPartyAdditionKey", oResponse.CustomerNumber);
+                    this.getView().getModel("ViewSettings").setProperty("/SoldToPartyAdditionText", oResponse.Name);
+                }.bind(this))
+                .catch(function () {
+                    this.getView().getModel("ViewSettings").setProperty("/SoldToPartyAdditionKey", "");
+                    this.getView().getModel("ViewSettings").setProperty("/SoldToPartyAdditionText", "");
+                }.bind(this));
+        },
+
+        _getSoldToParty: function (sCustomer, sLocation) {
+            return new Promise(function (resolve, reject) {
+                var oModel = this.getView().getModel();
+                if (!sCustomer || !sLocation) {
+                    reject();
+                    return;
+                }
+                oModel.callFunction("/GetSoldToParty", {
+                    urlParameters: {
+                        Location: sLocation,
+                        Customer: sCustomer
+                    },
+                    success: resolve,
+                    error: reject
+                });
+            }.bind(this));
+        },
 
         _getStockType: function (sMaterial) {
             return new Promise(function (resolve, reject) {
@@ -631,7 +673,7 @@ sap.ui.define([
             oDialog.open();
         },
 
-        _clearCustomerAdress: function() {
+        _clearCustomerAdress: function () {
             this.getView().getModel("ViewSettings").setProperty("/CustomerAddress", "");
         },
 
@@ -669,20 +711,20 @@ sap.ui.define([
             });
         },
 
-        _prefillStockTypeAndCheckQuantityForAllMaterials: function() {
+        _prefillStockTypeAndCheckQuantityForAllMaterials: function () {
             var oList = this.getView().byId("Pallets");
-            oList.getItems().forEach(function(oItem) {
+            oList.getItems().forEach(function (oItem) {
                 var oComboBox = this._getSpecialLoadCarrierTypeComboBoxFromRow(oItem);
                 var sMaterial = oComboBox.getSelectedKey();
                 this._getStockType(sMaterial)
-                .then(function (sStock) {
-                    var oContext = oComboBox.getBindingContext("Pallets");
-                    this.setBindingContextProperty(oContext, "SpecialStock", sStock);
-                    var bPrefilled = this._prefillQuantityWithStock(oItem);
-                    if (!bPrefilled) {
-                        this._doCheckRentStockQuantity(oItem);
-                    }
-                }.bind(this)); 
+                    .then(function (sStock) {
+                        var oContext = oComboBox.getBindingContext("Pallets");
+                        this.setBindingContextProperty(oContext, "SpecialStock", sStock);
+                        var bPrefilled = this._prefillQuantityWithStock(oItem);
+                        if (!bPrefilled) {
+                            this._doCheckRentStockQuantity(oItem);
+                        }
+                    }.bind(this));
             }, this);
         },
 

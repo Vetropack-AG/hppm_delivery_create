@@ -14,15 +14,11 @@ builder:
       afterTask: generateCachebusterInfo
       configuration:
         target:
-          destination: ERP_EMBEDDED_D91_100TEST
+          destination: ERP_EMBEDDED_D91_100
           url: http://vpavd910.vetropack.corporate.ads:44300
-          auth: basic
           client: "100"
-        credentials:
-          username: env:UI5_USERNAME
-          password: env:UI5_PASSWORD
         app:
           name: ZVGT_DEL_CREATE
           description: "HPPM: Delivery Create"
           package: ZVGT_HPPM_DELIVERY_CREATE
-          transport: "D91K912362"
+          transport: "D91K913842"
