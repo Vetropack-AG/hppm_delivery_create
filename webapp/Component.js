@@ -2,8 +2,9 @@ sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"zvgt/hppm/delivery_create/model/models",
 	"sap/ui/Device",
-	"sap/ui/fl/FakeLrepConnectorLocalStorage"
-], function (UIComponent, models, Device, FakeLrepConnectorLocalStorage) {
+	"sap/ui/fl/FakeLrepConnectorLocalStorage",
+	"zvgt/hppm/library"
+], function (UIComponent, models, Device, FakeLrepConnectorLocalStorage, hppmLibrary) {
 	"use strict";
 
 	/**
@@ -52,7 +53,18 @@ sap.ui.define([
 				this.enableFakeLrep();
 			}
 			this._addShellHeaderHomeButton();
+
+			hppmLibrary.addBTPCustomerNumberToHttpHeader(this);
+
+
 		},
+
+		getBaseURL: function () {
+            var appId = this.getManifestEntry("/sap.app/id");
+            var appPath = appId.replaceAll(".", "/");
+            var appModulePath = jQuery.sap.getModulePath(appPath);
+            return appModulePath;
+        },   
 
 		destroy: function () {
 			// call the base component's destroy function
@@ -69,8 +81,8 @@ sap.ui.define([
 
 		registerLib: function () {
 			if (window.location.href.indexOf("webidetesting") === -1) {
-				jQuery.sap.registerModulePath("zvgt.hppm", "/sap/bc/ui5_ui5/sap/zvgt_controls/");
-				jQuery.sap.require("zvgt_controls.library-preload");
+			//	jQuery.sap.registerModulePath("zvgt.hppm", "/sap/bc/ui5_ui5/sap/zvgt_controls/");
+			//	jQuery.sap.require("zvgt_controls.library-preload");
 			}
 		},
 
