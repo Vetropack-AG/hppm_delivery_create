@@ -36,6 +36,12 @@ sap.ui.define([
 			return oResult;
 		},
 
+		addHoursToDate: function (oDate, iHours) {
+			var oResult = new Date(oDate);
+			oResult.setTime(oResult.getTime() + (iHours * 60 * 60 * 1000));
+			return oResult;
+		},
+
 		/**
 		 * Adds a message to the message manager.
 		 * @param {object} mSettings The settings for the message.
@@ -192,20 +198,20 @@ sap.ui.define([
 
 		_validateControl: function (oControl) {
 			switch (oControl.getMetadata().getName()) {
-			case "sap.m.Input" || "sap.m.StepInput":
-				return this._validateInputBase(oControl);
-			case "sap.m.DateTimePicker":
-				return this._validateDateTimePicker(oControl);
-			case "sap.m.Select":
-				return this._validateSelect(oControl);
-			case "sap.m.ComboBox":
-				return this._validateComboBox(oControl);
-			case "sap.m.RadioButtonGroup":
-				return this._validateRadioButtonGroup(oControl);
-			case "sap.m.DatePicker":
-				return this._validateDatePicker(oControl);
-			default:
-				return true;
+				case "sap.m.Input" || "sap.m.StepInput":
+					return this._validateInputBase(oControl);
+				case "sap.m.DateTimePicker":
+					return this._validateDateTimePicker(oControl);
+				case "sap.m.Select":
+					return this._validateSelect(oControl);
+				case "sap.m.ComboBox":
+					return this._validateComboBox(oControl);
+				case "sap.m.RadioButtonGroup":
+					return this._validateRadioButtonGroup(oControl);
+				case "sap.m.DatePicker":
+					return this._validateDatePicker(oControl);
+				default:
+					return true;
 			}
 		},
 

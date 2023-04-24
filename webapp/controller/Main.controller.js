@@ -3,9 +3,8 @@ sap.ui.define([
     "sap/base/Log",
     "zvgt/hppm/delivery/create/model/formatter",
     "sap/ushell/services/URLParsing",
-    "sap/ui/core/routing/HashChanger",
-    "zvgt/hppm/library"
-], function (BaseController, Log, formatter, URLParsing, HashChanger, hppm) {
+    "sap/ui/core/routing/HashChanger"
+], function (BaseController, Log, formatter, URLParsing, HashChanger) {
     "use strict";
 
     var aSaveProperties = [
@@ -243,7 +242,7 @@ sap.ui.define([
                 this._handleGetSoldToyParty(sKey, sLocation);
             } else {
                 var sCustomer = this._getDeliveryProperty("SoldToParty");
-                this._handleGetSoldToyParty(sCustomer,  sKey);
+                this._handleGetSoldToyParty(sCustomer, sKey);
             }
         },
 
@@ -274,7 +273,7 @@ sap.ui.define([
             this.setVariantDirty();
 
             var sCustomer = this._getDeliveryProperty("SoldToParty");
-            this._handleGetSoldToyParty(sCustomer,  oEvent.getParameter("value"));
+            this._handleGetSoldToyParty(sCustomer, oEvent.getParameter("value"));
         },
 
         onOwnerChange: function (oEvent) {
@@ -444,13 +443,13 @@ sap.ui.define([
 
         _handleLoadingInfoDateChange: function (oEvent, sProperty) {
             var oValue = oEvent.getSource().getDateValue();
-            var oNewDate = this.addDaysToDate(oValue, 1);
+            var oNewDate = this.addHoursToDate(oValue, 2);
             this._setDeliveryProperty(sProperty, oNewDate);
             this.setVariantDirty();
         },
 
         _doCheckRentStockQuantity: function (oRow) {
-            if (this._sDeliveryType === hppm.DELIVERY_TYPE.EXTERNAL) {
+            if (this._sDeliveryType === zvgt.hppm.DELIVERY_TYPE.EXTERNAL) {
                 var oSelect = this._getSpecialLoadCarrierTypeComboBoxFromRow(oRow);
                 var oItem = oSelect.getSelectedItem();
                 if (oItem) {
@@ -467,7 +466,7 @@ sap.ui.define([
             var sStock = oSelect.getSelectedKey();
             var oInput = this._getQuantityInputFromRow(oRow);
             var sQuantity = oInput.getValue();
-            if (sQuantity && sQuantity !== "" && parseFloat(sQuantity, 10) > parseFloat(sStockQuantity, 10) && sStock === hppm.STOCK_TYPE.RENT) {
+            if (sQuantity && sQuantity !== "" && parseFloat(sQuantity, 10) > parseFloat(sStockQuantity, 10) && sStock === zvgt.hppm.STOCK_TYPE.RENT) {
                 oInput.setValueState("Warning");
                 oInput.setValueStateText(this.translateText("warning.notOnStock"));
             } else {
@@ -493,7 +492,7 @@ sap.ui.define([
                 Customer: this._getDeliveryProperty("SoldToParty"),
                 Plant: this._getDeliveryProperty("Owner"),
                 Material: this.getBindingContextProperty(oContext, "Key"),
-                SpecialStock: hppm.STOCK_TYPE.RENT
+                SpecialStock: zvgt.hppm.STOCK_TYPE.RENT
             });
 
             return new Promise(function (resolve, reject) {
@@ -532,10 +531,13 @@ sap.ui.define([
         },
 
         _setDeliveryType: function () {
-            this._sDeliveryType = this._isOutboundDelivery() ? hppm.DELIVERY_TYPE.EXTERNAL : hppm.DELIVERY_TYPE.INTERNAL;
+            if (this._isOutboundDelivery() || zvgt.hppm.isExternalUser()) {
+                this._sDeliveryType = zvgt.hppm.DELIVERY_TYPE.EXTERNAL;
+            } else {
+                this._sDeliveryType = zvgt.hppm.DELIVERY_TYPE.INTERNAL;
+            }
             this.getView().getModel("ViewSettings").setProperty("/DeliveryType", this._sDeliveryType);
-
-            this.getView().getModel("ViewSettings").setProperty("/DeliveryType", hppm.DELIVERY_TYPE.EXTERNAL);
+            //  this.getView().getModel("ViewSettings").setProperty("/DeliveryType", zvgt.hppm.DELIVERY_TYPE.EXTERNAL);
         },
 
         _isOutboundDelivery: function () {
@@ -771,7 +773,7 @@ sap.ui.define([
         _openCalculator: function (sMaterialGroup, sMaterial) {
             var sId = this._determineCalculatorFragment(sMaterialGroup);
             if (sId) {
-                if (sMaterialGroup === hppm.MATERIAL_GROUP.LAYER) {
+                if (sMaterialGroup === zvgt.hppm.MATERIAL_GROUP.LAYER) {
                     this._prefillMaterialHeight(sMaterial);
                 }
 
