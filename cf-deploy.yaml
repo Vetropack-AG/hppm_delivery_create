@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
 specVersion: '2.4'
 metadata:
-  name: zvgt.hppm.delivery_create
+  name: zvgthppmdeliverycreate
 type: application
 resources:
   configuration:

@@ -1,4 +1,4 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="zvgt.hppm.delivery_create.controller.App">
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="zvgt.hppm.delivery.create.controller.App">
 	<Shell id="shell">
 		<App id="app"/>
 	</Shell>

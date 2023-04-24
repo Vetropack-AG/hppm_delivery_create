@@ -1,14 +1,13 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
-	"zvgt/hppm/delivery_create/model/models",
+	"zvgt/hppm/delivery/create/model/models",
 	"sap/ui/Device",
-	"sap/ui/fl/FakeLrepConnectorLocalStorage",
-	"zvgt/hppm/library"
-], function (UIComponent, models, Device, FakeLrepConnectorLocalStorage, hppmLibrary) {
+	"sap/ui/fl/FakeLrepConnectorLocalStorage"
+], function (UIComponent, models, Device, FakeLrepConnectorLocalStorage) {
 	"use strict";
 
 	/**
-	 * @constructor zvgt.hppm.delivery_create.Component
+	 * @constructor zvgt.hppm.delivery.create.Component
 	 * 
 	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
@@ -22,11 +21,11 @@ sap.ui.define([
 	 * @extends sap.ui.core.UIComponent
 	 *
 	 * @public
-	 * @alias zvgt.hppm.delivery_create.Component
+	 * @alias zvgt.hppm.delivery.create.Component
 	 * @class 
 	 */
 
-	return UIComponent.extend("zvgt.hppm.delivery_create.Component", {
+	return UIComponent.extend("zvgt.hppm.delivery.create.Component", {
 
 		metadata: {
 			manifest: "json"
@@ -40,7 +39,7 @@ sap.ui.define([
 		 * The component is initialized by UI5 automatically during the startup of the app and calls the init method once.
 		 * @public
 		 * @override
-		 * @name zvgt.hppm.delivery_create.Component#init
+		 * @name zvgt.hppm.delivery.create.Component#init
 		 * @method
 		 */
 		init: function () {
@@ -54,17 +53,21 @@ sap.ui.define([
 			}
 			this._addShellHeaderHomeButton();
 
-			hppmLibrary.addBTPCustomerNumberToHttpHeader(this);
-
-
+			this._loadHppmLibrary();
+			zvgt.hppm.addBTPCustomerNumberToHttpHeader(this);
 		},
 
-		getBaseURL: function () {
-            var appId = this.getManifestEntry("/sap.app/id");
-            var appPath = appId.replaceAll(".", "/");
-            var appModulePath = jQuery.sap.getModulePath(appPath);
-            return appModulePath;
-        },   
+		_loadHppmLibrary: function() {
+			var sAppId = this.getManifestEntry("/sap.app/id");
+			var sAppPath = sAppId.replaceAll(".", "/");
+			var sAppModulePath = jQuery.sap.getModulePath(sAppPath);
+			var sLibraryPath = this._isCloudEnvironment() ? `${sAppModulePath}/zvgt/hppm` : "/sap/bc/ui5_ui5/sap/zvgt_controls/";
+			sap.ui.getCore().loadLibrary("zvgt.hppm", sLibraryPath);
+		},
+
+		_isCloudEnvironment: function() {
+			return location.hostname.includes("hana.ondemand") || location.hostname.includes("cfapps.eu");
+		},
 
 		destroy: function () {
 			// call the base component's destroy function
@@ -89,7 +92,7 @@ sap.ui.define([
 		/**
 		 * Registers the messsage manager to the app.
 		 * @private
-		 * @name zvgt.hppm.delivery_create.Component#_registerMessageManager
+		 * @name zvgt.hppm.delivery.create.Component#_registerMessageManager
 		 * @method
 		 */
 		_registerMessageManager: function () {
@@ -103,7 +106,7 @@ sap.ui.define([
 		/**
 		 * Getter for the contentDensity CSS class for the application.
 		 * @returns {string} The CSS class.
-		 * @name zvgt.hppm.delivery_create.Component#getContentDensityClass
+		 * @name zvgt.hppm.delivery.create.Component#getContentDensityClass
 		 * @public
 		 * @method
 		 */

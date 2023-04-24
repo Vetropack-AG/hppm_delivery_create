@@ -1,8 +1,9 @@
 {
-    "name": "zvgt.hppm.delivery_create",
+    "name": "zvgt.hppm.delivery.create",
     "version": "0.0.1",
     "description": "",
     "devDependencies": {
+        "@sap/approuter": "^14.1.1",
         "@sap/ui5-builder-webide-extension": "1.0.x",
         "@sap/ux-ui5-tooling": "1",
         "@ui5/cli": "^2.14.1",
@@ -12,29 +13,23 @@
         "ui5-task-zipper": "^0.5.0"
     },
     "scripts": {
-        "start": "fiori run --open \"test/flpSandbox.html?sap-client=200&sap-ui-xx-viewCache=false#app-tile\"",
-        "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flpSandboxMockServer.html?sap-client=200&sap-ui-xx-viewCache=false#app-tile\"",
-        "start-noflp": "fiori run --open \"index.html?sap-client=200&sap-ui-xx-viewCache=false\"",
-        "start-variants-management": "fiori run --open \"preview.html?sap-client=200&sap-ui-xx-viewCache=false&fiori-tools-rta-mode=true&sap-ui-rta-skip-flex-validation=true#preview-app\"",     
-        "start-mock": "fiori run --open \"test/flpSandboxMockServer.html?sap-client=200&sap-ui-xx-viewCache=false#app-tile\"",
-        "suite-tests": "fiori run --open 'test/testsuite.qunit.html'",
-        "unit-tests": "fiori run --open 'test/unit/unitTests.qunit.html'",
-        "int-tests": "fiori run --open 'test/integration/opaTests.qunit.html'",
-
+        "start": "npm run copy:lib && fiori run --open \"test/flpSandbox.html?sap-ui-xx-viewCache=false#app-tile\"",
+        "build": "ui5 build -a --clean-dest --include-task=generateManifestBundle generateCachebusterInfo",
+        "deploy": "npm run deploy:ui5 && echo 'Please press enter to deploy to CF...' && read arg && npm run deploy:cf",
         "deploy-config": "fiori add deploy-config",
-
-        "deploy:ui5": "npm run build && fiori deploy --config ui5-deploy.yaml && rimraf archive.zip",
+      
+        "deploy:ui5": "npm run remove:lib && npm run build:ui5 && fiori deploy --config ui5-deploy.yaml && rimraf archive.zip",
         "build:ui5": "ui5 build -a --clean-dest --include-task=generateManifestBundle generateCachebusterInfo",
         "undeploy:ui5": "fiori undeploy --config ui5-deploy.yaml",
-       
-        "build:cf": "npm run copy:lib && ui5 build preload --clean-dest --config cf-deploy.yaml --include-task=generateCachebusterInfo",
+
+        "copy:lib": "cp -r ../hppm_controls/src/zvgt ./webapp/",
+        "remove:lib": "rm -rf ./webapp/zvgt",
+
         "build:mta": "rimraf resources mta_archives && mbt build",
-        "copy:lib": "cp -r ../onpremise_hppm_controls/src/zvgt ./webapp",
-        "remove:lib": "rm -r ./webapp/zvgt",
-        "do_deploy:cf": "fiori cfDeploy",
-        "deploy:cf": "npm run do_build:cf && echo '\nWaiting 5 seconds before deployment...\n' && npm run do_deploy:cf",
+        "deploy:cf": "npm run copy:lib && sleep 2 && ui5 build preload --clean-dest --config cf-deploy.yaml --include-task=generateCachebusterInfo && sleep 5 && npm run build:mta && sleep 2 && fiori cfDeploy",
         "undeploy:cf": "cf undeploy zvgthppmdeliverycreate --delete-services --delete-service-keys --delete-service-brokers",
-        "do_build:cf": "npm run copy:lib && npm run build:cf && echo '\nWaiting 5 seconds for build to continue...\n' && sleep 5 && npm run build:mta && echo '\nWaiting 2 seconds for build to continue...\n' && sleep 2 && npm run remove:lib"
+        "build:cf": "ui5 build preload --clean-dest --config cf-deploy.yaml --include-task=generateCachebusterInfo",
+        "do:build:cf": "npm run copy:lib &&  && echo '\nWaiting 2 seconds for build to continue...\n' && sleep 2"
     },
     "ui5": {
         "dependencies": [
@@ -52,8 +47,5 @@
         "openui5",
         "sapui5"
     ],
-    "main": "webapp/index.html",
-    "dependencies": {
-        "@sap/approuter": "^14.1.1"
-    }
+    "main": "webapp/index.html"
 }

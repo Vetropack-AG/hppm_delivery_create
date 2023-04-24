@@ -1,7 +1,7 @@
 sap.ui.define([
-    "zvgt/hppm/delivery_create/controller/BaseController",
+    "zvgt/hppm/delivery/create/controller/BaseController",
     "sap/base/Log",
-    "zvgt/hppm/delivery_create/model/formatter",
+    "zvgt/hppm/delivery/create/model/formatter",
     "sap/ushell/services/URLParsing",
     "sap/ui/core/routing/HashChanger",
     "zvgt/hppm/library"
@@ -29,7 +29,7 @@ sap.ui.define([
     ];
 
     /**
-     * @constructor zvgt.hppm.delivery_create.controller.Main
+     * @constructor zvgt.hppm.delivery.create.controller.Main
      * 
      * @param {string} [sId] id for the new control, generated automatically if no id is given
      * @param {object} [mSettings] initial settings for the new control
@@ -40,14 +40,14 @@ sap.ui.define([
      * The controller for the main view.
      *
      * @author Herbert Kaintz
-     * @extends zvgt.hppm.delivery_create.controller.BaseController
+     * @extends zvgt.hppm.delivery.create.controller.BaseController
      *
      * @public
-     * @alias zvgt.hppm.delivery_create.controller.Main
+     * @alias zvgt.hppm.delivery.create.controller.Main
      * @class 
      */
 
-    return BaseController.extend("zvgt.hppm.delivery_create.controller.Main", {
+    return BaseController.extend("zvgt.hppm.delivery.create.controller.Main", {
         formatter: formatter,
 
         /* =========================================================== */
@@ -57,7 +57,7 @@ sap.ui.define([
         /**
          * Called when a controller is instantiated.
          * Can be used to modify the control before it is displayed, to bind event handlers and do other one-time initialization.
-         * @name zvgt.hppm.delivery_create.controller.Main#init
+         * @name zvgt.hppm.delivery.create.controller.Main#init
          * @override
          * @public
          * @method
@@ -110,7 +110,7 @@ sap.ui.define([
          * Eventhandler when the save button is pressed.
          * @listens sap.m.Button#press
          * @method
-         * @name zvgt.hppm.delivery_create.controller.Main#onSavePress
+         * @name zvgt.hppm.delivery.create.controller.Main#onSavePress
          */
         onSavePress: function () {
             if (!this._validateInputs()) {
@@ -131,7 +131,7 @@ sap.ui.define([
          * @param {object} oEvent The event issued by the control.
          * @listens sap.ui.layout.form.SimpleForm#validateFieldGroup
          * @method
-         * @name zvgt.hppm.delivery_create.controller.Main#onLoadingInformationValidate
+         * @name zvgt.hppm.delivery.create.controller.Main#onLoadingInformationValidate
          */
         onLoadingInformationValidate: function (oEvent) {
             this._bLoadingInfoValid = this.validateFieldGroup(oEvent);
@@ -142,7 +142,7 @@ sap.ui.define([
          * @param {object} oEvent The event issued by the control.
          * @listens sap.m.Button#press
          * @method
-         * @name zvgt.hppm.delivery_create.controller.Main#onSavePress
+         * @name zvgt.hppm.delivery.create.controller.Main#onSavePress
          */
         onMessagePopoverPress: function (oEvent) {
             this.getFragment("MessagePopover", this).openBy(oEvent.getSource());

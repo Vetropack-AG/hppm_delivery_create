@@ -1,6 +1,6 @@
 specVersion: "2.4"
 metadata:
-  name: zvgt.hppm.delivery_create
+  name: zvgt.hppm.delivery.create
 type: application
 framework:
   name: SAPUI5
@@ -46,5 +46,5 @@ server:
     - name: fiori-tools-preview
       afterMiddleware: fiori-tools-appreload
       configuration:
-        component: zvgt.hppm.delivery_create
+        component: zvgt.hppm.delivery.create
         ui5Theme: sap_fiori_3

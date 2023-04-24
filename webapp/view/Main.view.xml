@@ -1,4 +1,4 @@
-<mvc:View controllerName="zvgt.hppm.delivery_create.controller.Main" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m"
+<mvc:View controllerName="zvgt.hppm.delivery.create.controller.Main" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m"
 	xmlns:core="sap.ui.core" xmlns:uxap="sap.uxap" 	xmlns:tnt="sap.tnt">
 	<uxap:ObjectPageLayout upperCaseAnchorBar="false" showFooter="true">
 		<uxap:headerContent>
@@ -6,7 +6,7 @@
 				<tnt:InfoLabel renderMode="Narrow" displayOnly= "true" class="sapUiTinyMarginTop" 
 					text="{= ${ViewSettings>/DeliveryType} === 'ZLB' ? ${i18n>main.internal} : ${i18n>main.external} }"
 					colorScheme="{= ${ViewSettings>/DeliveryType} === 'ZLB' ? 7 : 2 }" />
-				<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.SmartVariant" type="XML"/>
+				<core:Fragment fragmentName="zvgt.hppm.delivery.create.view.fragment.SmartVariant" type="XML"/>
 			</HBox>
 		</uxap:headerContent>
 		<uxap:sections>
@@ -15,9 +15,9 @@
 					<uxap:ObjectPageSubSection titleUppercase="false">
 						<uxap:blocks>
 							<VBox>
-								<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.LoadingInformation" type="XML"/>
-								<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Pallets" type="XML"/>
-								<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Comments" type="XML"/>
+								<core:Fragment fragmentName="zvgt.hppm.delivery.create.view.fragment.LoadingInformation" type="XML"/>
+								<core:Fragment fragmentName="zvgt.hppm.delivery.create.view.fragment.Pallets" type="XML"/>
+								<core:Fragment fragmentName="zvgt.hppm.delivery.create.view.fragment.Comments" type="XML"/>
 							</VBox>
 						</uxap:blocks>
 					</uxap:ObjectPageSubSection>
@@ -27,7 +27,7 @@
 				<uxap:subSections>
 					<uxap:ObjectPageSubSection titleUppercase="false">
 						<uxap:blocks>
-							<core:Fragment fragmentName="zvgt.hppm.delivery_create.view.fragment.Documents" type="XML"/>
+							<core:Fragment fragmentName="zvgt.hppm.delivery.create.view.fragment.Documents" type="XML"/>
 						</uxap:blocks>
 					</uxap:ObjectPageSubSection>
 				</uxap:subSections>

@@ -1,7 +1,7 @@
 {
     "_version": "1.12.0",
     "sap.app": {
-        "id": "zvgt.hppm.delivery_create",
+        "id": "zvgt.hppm.delivery.create",
         "ach": "PA-FIO",
         "type": "application",
         "i18n": "i18n/i18n.properties",
@@ -58,7 +58,7 @@
         "flexEnabled": false,
         "handleValidation": true,
         "rootView": {
-            "viewName": "zvgt.hppm.delivery_create.view.App",
+            "viewName": "zvgt.hppm.delivery.create.view.App",
             "type": "XML",
             "async": true,
             "id": "App"
@@ -68,10 +68,7 @@
             "libs": {
                 "sap.m": {},
                 "sap.ui.core": {},
-                "sap.ui.layout": {},
-                "zvgt.hppm": {
-                    "minVersion": "1.0.0"
-                }
+                "sap.ui.layout": {}
             }
         },
         "contentDensities": {
@@ -82,7 +79,7 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "zvgt.hppm.delivery_create.i18n.i18n"
+                    "bundleName": "zvgt.hppm.delivery.create.i18n.i18n"
                 }
             },
             "": {
@@ -113,7 +110,7 @@
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
                 "async": true,
-                "viewPath": "zvgt.hppm.delivery_create.view",
+                "viewPath": "zvgt.hppm.delivery.create.view",
                 "controlAggregation": "pages",
                 "controlId": "app",
                 "clearControlAggregation": false,
