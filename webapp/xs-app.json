@@ -5,7 +5,7 @@
     {
       "source": "^/sap/(.*)$",
       "target": "/sap/$1",
-      "destination": "ERP_EMBEDDED_D91",
+      "destination": "ERP_EMBEDDED",
       "authenticationType": "xsuaa",
       "csrfProtection": false
     },
