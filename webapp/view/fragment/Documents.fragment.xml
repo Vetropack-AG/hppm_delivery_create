@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:hppm="zvgt.hppm.controls" >
 	<hppm:UploadCollection 
 		id="UploadCollection" 
-		multiple="false" 
+		multiple="true" 
 		sameFilenameAllowed="false" 
 		instantUpload="false"
 		duplicateFileNameError="onDuplicateFileNameError" />
