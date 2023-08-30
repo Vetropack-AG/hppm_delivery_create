@@ -5,3 +5,7 @@
 .vpUiFormRespGridNoPaddingBotton .sapUiFormResGridMain {
 	padding-bottom: 0 !important;
 }
+
+.hideShellLogo .sapMShellLogo {
+	display: none !important;
+}

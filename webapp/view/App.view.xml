@@ -1,5 +1,5 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="zvgt.hppm.delivery.create.controller.App">
-	<Shell id="shell">
+	<Shell id="shell" class="hideShellLogo">
 		<App id="app"/>
 	</Shell>
 </mvc:View>
