@@ -37,14 +37,14 @@
                 <Label visible="{= ${ViewSettings>/CustomerAddress} !== '' }" />
                 <Text text="{ViewSettings>/CustomerAddress}" visible="{= ${ViewSettings>/CustomerAddress} !== '' }"/>
 					
-				<Label text="{i18n>main.pickupDate}" visible="{= ${Incoterm} === 'DAP' &amp;&amp; ${Owner} !== '1701' }"/>
+				<Label text="{i18n>main.pickupDate}" visible="{= ${Incoterm} === 'DAP' &amp;&amp; ( ${Owner} !== '1701' &amp;&amp; ${Owner} !== '1702') }"/>
 				
 				<DatePicker 
 					placeholder="{i18n>main.fromPlaceholer}" 
 					required="true" 
 					change="onPickupDateFromChange"
 					fieldGroupIds="LoadingInformation"
-					visible="{= ${Incoterm} === 'DAP' &amp;&amp; ${Owner} !== '1701'  }"
+					visible="{= ${Incoterm} === 'DAP' &amp;&amp; (${Owner} !== '1701' &amp;&amp; ${Owner} !== '1702')  }"
 					value="{ 
 						path: 'PickUpDateFrom', 
 						type: 'sap.ui.model.odata.type.DateTime', 
@@ -56,7 +56,7 @@
 					required="true" 
 					change="onPickupDateUntilChange"
 					fieldGroupIds="LoadingInformation"
-					visible="{= ${Incoterm} === 'DAP' &amp;&amp; ${Owner} !== '1701'  }"
+					visible="{= ${Incoterm} === 'DAP' &amp;&amp; (${Owner} !== '1701' &amp;&amp; ${Owner} !== '1702')  }"
 					value="{ 
 						path: 'PickUpDateUntil', 
 						type: 'sap.ui.model.odata.type.DateTime', 
@@ -64,31 +64,31 @@
 						formatOptions: { UTC: true }
 						}"/>
 
-				<Label text="{i18n>main.customerReferenceDate}" visible="{= ${Incoterm} === 'DAP' &amp;&amp; ${Owner} === '1701' }"/>
+				<Label text="{i18n>main.customerReferenceDate}" visible="{= ${Incoterm} === 'DAP' &amp;&amp; ( ${Owner} === '1701' || ${Owner} === '1702') }"/>
 				<DatePicker 
 					placeholder="{i18n>main.fromPlaceholer}" 
 					required="true" 
 					change="onPickupDateFromChange"
 					fieldGroupIds="LoadingInformation"
-					visible="{= ${Incoterm} === 'DAP' &amp;&amp; ${Owner} === '1701' }"
+					visible="{= ${Incoterm} === 'DAP' &amp;&amp; (${Owner} === '1701' || ${Owner} === '1702') }"
 					value="{ 
 						path: 'PickUpDateFrom', 
 						type: 'sap.ui.model.odata.type.DateTime', 
 						constraints: { displayFormat: 'Date' },
 						formatOptions: { UTC: true, strictParsing: 'true' }
 						 }"/>
-				<Label text="{i18n>main.customerDeliveryNo}" visible="{= ${Owner} !== '1701' }" />
+				<Label text="{i18n>main.customerDeliveryNo}" visible="{= (${Owner} !== '1701' &amp;&amp; ${Owner} !== '1702') }" />
 				<Input 
 					required="false" 
-					visible="{= ${Owner} !== '1701' }"
+					visible="{= (${Owner} !== '1701' &amp;&amp; ${Owner} !== '1702') }"
 					fieldGroupIds="LoadingInformation"
 					value="{CustomerDelivery}"
 					change="setVariantDirty" />
 
-				<Label text="{i18n>main.customerReference}" visible="{= ${Owner} === '1701' }"/>
+				<Label text="{i18n>main.customerReference}" visible="{= (${Owner} === '1701' || ${Owner} === '1702') }"/>
 				<Input 
 					required="false" 
-					visible="{= ${Owner} === '1701' }"
+					visible="{= (${Owner} === '1701' || ${Owner} === '1702') }"
 					fieldGroupIds="LoadingInformation"
 					value="{CustomerDelivery}"
 					change="setVariantDirty" />
@@ -111,10 +111,10 @@
 					change="onOwnerChange"
 					value="{ parts: [ {path:'Owner'}, {path: 'OwnerText'} ], formatter:'.formatter.descriptionAndKey'}"/>
 					
-				<Label text="{i18n>main.deliveryDate}" visible="{= ${Incoterm} !== 'DAP' &amp;&amp; ${Owner} !== '1701'}"/>
+				<Label text="{i18n>main.deliveryDate}" visible="{= ${Incoterm} !== 'DAP' &amp;&amp; (${Owner} !== '1701' &amp;&amp; ${Owner} !== '1702')}"/>
 				<DatePicker
 					placeholder="{i18n>main.fromPlaceholer}" 
-					visible="{= ${Incoterm} !== 'DAP' &amp;&amp; ${Owner} !== '1701'}"
+					visible="{= ${Incoterm} !== 'DAP' &amp;&amp; (${Owner} !== '1701' &amp;&amp; ${Owner} !== '1702')}"
 					required="true" 
 					fieldGroupIds="LoadingInformation"
 					change="onDeliveryDateFromChange"
@@ -126,7 +126,7 @@
 						}"/>
 				<DatePicker 
 					placeholder="{i18n>main.untilPlaceholer}" 
-					visible="{= ${Incoterm} !== 'DAP' &amp;&amp; ${Owner} !== '1701'}"
+					visible="{= ${Incoterm} !== 'DAP' &amp;&amp; (${Owner} !== '1701' &amp;&amp; ${Owner} !== '1702')}"
 					required="true" 
 					fieldGroupIds="LoadingInformation"
 					change="onDeliveryDateUntilChange"
@@ -137,10 +137,10 @@
 						formatOptions: { UTC: true }
 						 }"/>
 
-				<Label text="{i18n>main.customerReferenceDate}" visible="{= ${Incoterm} !== 'DAP' &amp;&amp; ${Owner} === '1701' }"/>
+				<Label text="{i18n>main.customerReferenceDate}" visible="{= ${Incoterm} !== 'DAP' &amp;&amp; ( ${Owner} === '1701' || ${Owner} === '1702') }"/>
 				<DatePicker
 					placeholder="{i18n>main.fromPlaceholer}" 
-					visible="{= ${Incoterm} !== 'DAP' &amp;&amp; ${Owner} === '1701' }"
+					visible="{= ${Incoterm} !== 'DAP' &amp;&amp; (${Owner} === '1701' || ${Owner} === '1702') }"
 					required="true" 
 					fieldGroupIds="LoadingInformation"
 					change="onDeliveryDateFromChange"
