@@ -6,9 +6,10 @@
         "@sap/approuter": "^14.1.1",
         "@sap/ui5-builder-webide-extension": "1.0.x",
         "@sap/ux-ui5-tooling": "1",
-        "@ui5/cli": "^2.14.1",
+        "@ui5/cli": "^3.0.4",
         "mbt": "^1.2.18",
         "rimraf": "3.0.2",
+        "ui5-task-cachebuster": "^3.0.4",
         "ui5-task-flatten-library": "0.2.5",
         "ui5-task-zipper": "^0.5.0"
     },
@@ -17,14 +18,11 @@
         "build": "ui5 build -a --clean-dest --include-task=generateManifestBundle generateCachebusterInfo",
         "deploy": "npm run deploy:ui5 && echo 'Please press enter to deploy to CF...' && read arg && npm run deploy:cf",
         "deploy-config": "fiori add deploy-config",
-      
         "deploy:ui5": "npm run remove:lib && npm run build:ui5 && fiori deploy --config ui5-deploy.yaml && rimraf archive.zip",
         "build:ui5": "ui5 build -a --clean-dest --include-task=generateManifestBundle generateCachebusterInfo",
         "undeploy:ui5": "fiori undeploy --config ui5-deploy.yaml",
-
         "copy:lib": "cp -r ../hppm_controls/src/zvgt ./webapp/",
         "remove:lib": "rm -rf ./webapp/zvgt",
-
         "build:mta": "rimraf resources mta_archives && mbt build",
         "deploy:cf": "npm run copy:lib && sleep 2 && ui5 build preload --clean-dest --config cf-deploy.yaml --include-task=generateCachebusterInfo && sleep 5 && npm run build:mta && sleep 2 && fiori cfDeploy",
         "undeploy:cf": "cf undeploy zvgthppmdeliverycreate --delete-services --delete-service-keys --delete-service-brokers",
