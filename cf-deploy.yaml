@@ -23,8 +23,3 @@ builder:
       archiveName: zvgthppmdeliverycreate
       additionalFiles:
       - xs-app.json
-  - name: ui5-task-cachebuster
-    beforeTask: ui5-task-zipper
-    configuration:
-      moveResources: true
-      excludeFromMove: ["index.html", "logout.html"]
