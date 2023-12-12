@@ -17,7 +17,7 @@
         },
         "dataSources": {
             "ZVGT_UI_HPPM_DELIVERY_CREATE_SRV": {
-                "uri": "/sap/opu/odata/sap/ZVGT_UI_HPPM_DELIVERY_CREATE_SRV/",
+                "uri": "sap/opu/odata/sap/ZVGT_UI_HPPM_DELIVERY_CREATE_SRV/",
                 "type": "OData",
                 "settings": {
                     "localUri": "localService/metadata.xml"

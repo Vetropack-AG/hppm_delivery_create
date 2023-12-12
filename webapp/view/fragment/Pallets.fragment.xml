@@ -52,7 +52,7 @@
 					</Select>
 					
 					<HBox width="100%" id="Quantity">
-						<Input value="{ path:'Pallets>Quantity', type:'sap.ui.model.odata.type.Decimal' }" type="Number" change="onMaterialQuantityChange"/>
+						<Input value="{ path:'Pallets>Quantity', type:'sap.ui.model.odata.type.Decimal' }" change="onMaterialQuantityChange"/>
 						<Button icon="sap-icon://simulate" tooltip="{i18n.main.calculate}" press="onOpenCalulatorPress"/>
 					</HBox>
 				</cells>
