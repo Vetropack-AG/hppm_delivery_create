@@ -279,6 +279,24 @@ sap.ui.define([
 			}
 			oControl.setValueState(sValueState);
 			return sValueState === "Error" ? false : true;
+		},
+		_navigateToPOD: function (sDeliveryKey) {
+			let oUShellContainter = sap.ushell.Container.getService("CrossApplicationNavigation");
+			if (oUShellContainter) { 
+				oUShellContainter.toExternal({
+					target: {
+						semanticObject: "OutboundDelivery",
+						action: "deliveryoverview"												
+					},
+					params: {
+						DeliveryKey: sDeliveryKey
+					}
+				})	
+			} 
+
+					
+			
+
 		}
 	});
 });

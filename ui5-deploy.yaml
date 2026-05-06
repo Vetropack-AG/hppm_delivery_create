@@ -16,13 +16,11 @@ builder:
         target:
           destination: ERP_EMBEDDED_D91_100
           url: http://vpavd910.vetropack.corporate.ads:44300
-          client: "100"
-          auth: basic
-        credentials:
-          username: env:UI5_USERNAME
-          password: env:UI5_PASSWORD
+          client: '100'
         app:
           name: ZVGT_DEL_CREATE
-          description: "HPPM: Delivery Create"
+          description: PoD
           package: ZVGT_HPPM_DELIVERY_CREATE
-          transport: "D91K922487"
+          transport: D91K927524
+        exclude:
+          - /test/

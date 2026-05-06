@@ -651,21 +651,33 @@ sap.ui.define([
                 content: new sap.m.Text({
                     text: this.translateText("success.deliveryCreated", [oData.DeliveryKey])
                 }),
-                beginButton: new sap.m.Button({
-                    type: "Emphasized",
-                    text: "{i18n>general.goBack}",
-                    press: function () {
-                        oDialog.close();
-                        this.goBack();
-                    }.bind(this)
-                }),
-                endButton: new sap.m.Button({
-                    text: "{i18n>general.close}",
-                    press: function () {
-                        this._resetData();
-                        oDialog.close();
-                    }.bind(this)
-                }),
+
+                buttons: [
+                    new sap.m.Button({
+                        type: "Emphasized",
+                        text: "{i18n>general.POD}",
+                        press: function () {                            
+                            oDialog.close();
+                            this._navigateToPOD([oData.DeliveryKey]);
+                            // this.goBack();
+                        }.bind(this)
+                    }),
+                    new sap.m.Button({
+                        type: "Emphasized",
+                        text: "{i18n>general.goBack}",
+                        press: function () {
+                            oDialog.close();
+                            this.goBack();
+                        }.bind(this)
+                    }),
+                    new sap.m.Button({
+                        text: "{i18n>general.close}",
+                        press: function () {
+                            this._resetData();
+                            oDialog.close();
+                        }.bind(this)
+                    })
+                ],
                 afterClose: function () {
                     oDialog.destroy();
                 }

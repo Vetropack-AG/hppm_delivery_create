@@ -15,21 +15,20 @@
     "scripts": {
         "start": "npm run copy:lib && fiori run --open \"test/flpSandbox.html?sap-ui-xx-viewCache=false#app-tile\"",
         "build": "ui5 build -a --clean-dest --include-task=generateManifestBundle generateCachebusterInfo",
-        "deploy": "npm run deploy:ui5 && echo 'Please press enter to deploy to CF...' && read arg && npm run deploy:cf",
+        "deploy": "npm run build && fiori deploy --config ui5-deploy.yaml",
         "deploy-config": "fiori add deploy-config",
-      
         "deploy:ui5": "npm run remove:lib && npm run build:ui5 && fiori deploy --config ui5-deploy.yaml && rimraf archive.zip",
         "build:ui5": "ui5 build -a --clean-dest --include-task=generateManifestBundle generateCachebusterInfo",
         "undeploy:ui5": "fiori undeploy --config ui5-deploy.yaml",
-
         "copy:lib": "cp -r ../hppm_controls/src/zvgt ./webapp/",
         "remove:lib": "rm -rf ./webapp/zvgt",
-
         "build:mta": "rimraf resources mta_archives && mbt build",
         "deploy:cf": "npm run copy:lib && sleep 2 && ui5 build preload --clean-dest --config cf-deploy.yaml --include-task=generateCachebusterInfo && sleep 5 && npm run build:mta && sleep 2 && fiori cfDeploy",
         "undeploy:cf": "cf undeploy zvgthppmdeliverycreate --delete-services --delete-service-keys --delete-service-brokers",
         "build:cf": "ui5 build preload --clean-dest --config cf-deploy.yaml --include-task=generateCachebusterInfo",
-        "do:build:cf": "npm run copy:lib &&  && echo '\nWaiting 2 seconds for build to continue...\n' && sleep 2"
+        "do:build:cf": "npm run copy:lib &&  && echo '\nWaiting 2 seconds for build to continue...\n' && sleep 2",
+        "undeploy": "npm run build && fiori undeploy --config ui5-deploy.yaml",
+        "deploy-test": "npm run build && fiori deploy --config ui5-deploy.yaml --testMode true"
     },
     "ui5": {
         "dependencies": [
@@ -47,5 +46,8 @@
         "openui5",
         "sapui5"
     ],
-    "main": "webapp/index.html"
+    "main": "webapp/index.html",
+    "dependencies": {
+        "punycode": "^2.3.1"
+    }
 }
