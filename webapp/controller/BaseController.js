@@ -161,7 +161,8 @@ sap.ui.define([
 		},
 
 		validateForm: function (oForm, sFieldGroupId) {
-			var aControls = oForm.getControlsByFieldGroupId(sFieldGroupId);
+			// var aControls = oForm.getControlsByFieldGroupId(sFieldGroupId); //Fix of the BTP issue faced on 24.09.2026 ISP-34858
+			var aControls = oForm.getContent();  //Fix of the BTP issue faced on 24.09.2026 ISP-34858
 			return this._validateControls(aControls);
 		},
 
@@ -203,7 +204,7 @@ sap.ui.define([
 				case "sap.m.DateTimePicker":
 					return this._validateDateTimePicker(oControl);
 				case "sap.m.Select":
-					return this._validateSelect(oControl);
+					return this._validateSelect(oControl);  					
 				case "sap.m.ComboBox":
 					return this._validateComboBox(oControl);
 				case "sap.m.RadioButtonGroup":
@@ -218,12 +219,14 @@ sap.ui.define([
 		_validateInputBase: function (oControl) {
 			var sValueState = "None";
 			var oBinding = oControl.getBinding("value");
-			var oType = oBinding.getType();
-			if (oType) {
-				try {
-					oType.validateValue(oControl.getValue());
-				} catch (err) {
-					sValueState = "Error";
+			if (oBinding) {
+				var oType = oBinding.getType();
+				if (oType) {
+					try {
+						oType.validateValue(oControl.getValue());
+					} catch (err) {
+						sValueState = "Error";
+					}
 				}
 			}
 			if (oControl.getRequired() && (!oControl.getValue() || oControl.getValue() === "")) {
@@ -231,6 +234,7 @@ sap.ui.define([
 			}
 			oControl.setValueState(sValueState);
 			return sValueState === "Error" ? false : true;
+
 		},
 
 		_validateDateTimePicker: function (oControl) {
@@ -282,20 +286,20 @@ sap.ui.define([
 		},
 		_navigateToPOD: function (sDeliveryKey) {
 			let oUShellContainter = sap.ushell.Container.getService("CrossApplicationNavigation");
-			if (oUShellContainter) { 
+			if (oUShellContainter) {
 				oUShellContainter.toExternal({
 					target: {
 						semanticObject: "OutboundDelivery",
-						action: "deliveryoverview"												
+						action: "deliveryoverview"
 					},
 					params: {
 						DeliveryKey: sDeliveryKey
 					}
-				})	
-			} 
+				})
+			}
 
-					
-			
+
+
 
 		}
 	});

@@ -654,11 +654,12 @@ sap.ui.define([
 
                 buttons: [
                     new sap.m.Button({
-                        type: "Emphasized",
+                        type: "Accept",
+                        visible: false,
                         text: "{i18n>general.POD}",
                         press: function () {                            
                             oDialog.close();
-                            this._navigateToPOD([oData.DeliveryKey]);
+                            this._navigateToPOD(oData.DeliveryKey);
                             // this.goBack();
                         }.bind(this)
                     }),
