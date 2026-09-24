@@ -4,7 +4,7 @@
     "description": "",
     "devDependencies": {
         "@sap/approuter": "^14.1.1",
-        "@sap/ui5-builder-webide-extension": "1.0.x",
+        "@sap/ui5-builder-webide-extension": "1.1.x",
         "@sap/ux-ui5-tooling": "1",
         "@ui5/cli": "^2.14.1",
         "mbt": "^1.2.18",
