@@ -3,11 +3,11 @@
     "version": "0.0.1",
     "description": "",
     "devDependencies": {
-        "@sap/approuter": "^14.1.1",
-        "@sap/ui5-builder-webide-extension": "1.0.x",
+        "@sap/approuter": "^21.4.0",
+        "@sap/ui5-builder-webide-extension": "1.1.x",
         "@sap/ux-ui5-tooling": "1",
-        "@ui5/cli": "^2.14.1",
-        "mbt": "^1.2.18",
+        "@ui5/cli": "^4.0.52",
+        "mbt": "^1.2.49",
         "rimraf": "3.0.2",
         "ui5-task-flatten-library": "0.2.5",
         "ui5-task-zipper": "^0.5.0"
